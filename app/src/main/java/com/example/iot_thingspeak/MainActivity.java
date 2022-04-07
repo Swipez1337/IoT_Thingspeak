@@ -26,8 +26,7 @@ public class MainActivity extends AppCompatActivity {
     // Declaring public variables
     int readTemp1 ;
     int wantedTemp1 ;
-    boolean ledStatus, fanStatus;
-    boolean testStatus = false;
+    boolean ledStatus, fanStatus, initTemp = true, testStatus = false;
 
 
     @Override
@@ -74,11 +73,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    public void tempInit(View view) {
+        if (initTemp){
+            readTemp1 = 25;
+            initTemp = false;
+        }
+    }
+
+
     /**
      * Get temperature status via ThingSpeak API
      */
-    public void getTempStatus() {
-        readTemp1 = 25;
+    public void getTempStatus(View view) {
+        tempInit(view);
+        wantedTemp1 = readTemp1;
+
+        TextView textView = (TextView) findViewById(R.id.textview6);
+        textView.setText(String.valueOf(wantedTemp1));
+
     }
 
 
@@ -116,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
     public void updateData(View view){
         getLedStatus(view);
         getFanStatus(view);
+        getTempStatus(view); //currently sets a fixed value!!
     }
 
 
@@ -181,6 +195,33 @@ public class MainActivity extends AppCompatActivity {
         if (testStatus) {
             Toast.makeText(getApplicationContext(),"TEST1",Toast.LENGTH_SHORT).show();
         }
+
+    }
+
+    //decrement temp
+    public void clickButton3(View view) {
+        if (initTemp) {updateData(view);} //in case values have not been read yet
+
+        if (wantedTemp1 > 0){ //no negative values
+        wantedTemp1 --;
+
+        TextView textView = (TextView) findViewById(R.id.textview6);
+        textView.setText(String.valueOf(wantedTemp1));
+
+        }
+    }
+
+    //increment temp
+    public void clickButton4(View view) {
+        if (initTemp) {updateData(view);} //in case values have not been read yet
+
+        wantedTemp1 ++;
+
+        TextView textView = (TextView) findViewById(R.id.textview6);
+        textView.setText(String.valueOf(wantedTemp1));
+
+
+
 
     }
 
