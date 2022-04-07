@@ -24,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     // Declaring public variables
-    int readTemp1 ;
-    int wantedTemp1 ;
+    int readTemp1;
+    int wantedTemp1;
     boolean ledStatus, fanStatus, initTemp = true, testStatus = false;
 
 
@@ -73,9 +73,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     public void tempInit(View view) {
-        if (initTemp){
+        if (initTemp) {
             readTemp1 = 25;
             initTemp = false;
         }
@@ -126,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         fanStatus = !fanStatus;
     }
 
-    public void updateData(View view){
+    public void updateData(View view) {
         getLedStatus(view);
         getFanStatus(view);
         getTempStatus(view); //currently sets a fixed value!!
@@ -146,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Update view of LED status
         TextView textView = (TextView) findViewById(R.id.textview2);
-        if (ledStatus){
+        if (ledStatus) {
             textView.setText(getString(R.string.thingspeakAction_LEDon));
 
         } else {
@@ -160,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
 */
 
         if (testStatus) {
-            Toast.makeText(getApplicationContext(),"TEST1",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "TEST1", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -179,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Update view of LED status
         TextView textView = (TextView) findViewById(R.id.textview5);
-        if (ledStatus){
+        if (ledStatus) {
             textView.setText(getString(R.string.thingspeakAction_LEDon));
 
         } else {
@@ -193,47 +192,49 @@ public class MainActivity extends AppCompatActivity {
 */
 
         if (testStatus) {
-            Toast.makeText(getApplicationContext(),"TEST1",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "TEST1", Toast.LENGTH_SHORT).show();
         }
 
     }
 
     //decrement temp
     public void clickButton3(View view) {
-        if (initTemp) {updateData(view);} //in case values have not been read yet
+        if (initTemp) {
+            updateData(view);
+        } //in case values have not been read yet
 
-        if (wantedTemp1 > 0){ //no negative values
-        wantedTemp1 --;
+        if (wantedTemp1 > 0) { //no negative values
+            wantedTemp1--;
 
-        TextView textView = (TextView) findViewById(R.id.textview6);
-        textView.setText(String.valueOf(wantedTemp1));
+            TextView textView = (TextView) findViewById(R.id.textview6);
+            textView.setText(String.valueOf(wantedTemp1));
 
         }
     }
 
     //increment temp
     public void clickButton4(View view) {
-        if (initTemp) {updateData(view);} //in case values have not been read yet
+        if (initTemp) {
+            updateData(view);
+        } //in case values have not been read yet
 
-        wantedTemp1 ++;
+        wantedTemp1++;
 
         TextView textView = (TextView) findViewById(R.id.textview6);
         textView.setText(String.valueOf(wantedTemp1));
 
 
-
-
     }
 
     /**
-     TODO: Implement turn on LED function
+     * TODO: Implement turn on LED function
      */
     public void turnOffLED() {
 
     }
 
     /**
-     TODO: Implement turn off LED function
+     * TODO: Implement turn off LED function
      */
     public void turnOnLED() {
 

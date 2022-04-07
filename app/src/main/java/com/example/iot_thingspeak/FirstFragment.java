@@ -31,7 +31,6 @@ public class FirstFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-
         binding.imageView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
