@@ -26,9 +26,10 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     // Declaring public variables
-    int temperatureVal1 = 0 ;
+    int readTemp1 ;
+    int wantedTemp1 ;
     boolean status ;
-
+    boolean testStatus = true;
 
 
     @Override
@@ -54,15 +55,93 @@ public class MainActivity extends AppCompatActivity {
         });
 
          */
+
+        //clickButton0();
     }
+
+    /**
+     * Get LED status via ThingSpeak API
+     */
+    public void getLedStatus() {
+        if (true) {
+            status = true;
+        } else {
+            status = false;
+        }
+    }
+
+
+    /**
+     * Get temperature status via ThingSpeak API
+     */
+    public void getTempStatus() {
+        readTemp1 = 25;
+    }
+
+
+    /**
+     * Set wanted temperature
+     */
+    public void setTemp() {
+        wantedTemp1 = 20;
+
+    }
+
+
 
     public void clickButton0(View view) {
-        Toast.makeText(getApplicationContext(),"Toast message",Toast.LENGTH_SHORT).show();
 
+        //Testing with turning on/off LED
+        if (status) { //turned on, turn off
+            status = false;
+            turnOffLED();
+        } else { //turned off, turn on
+            status = true;
+            turnOnLED();
+        }
+
+        //Update view of LED status
         TextView textView = (TextView) findViewById(R.id.textview2);
-        textView.setText("test");
+        if (status){
+            textView.setText(getString(R.string.thingspeakAction_LEDon));
+
+        } else {
+            textView.setText(getString(R.string.thingspeakAction_LEDoff));
+        }
+
+        /*
+        //Update view of temperature
+        TextView textView = (TextView) findViewById(R.id.textview2);
+        textView.setText(String.valueOf(temperatureVal1));
+*/
+
+        if (testStatus) {
+            Toast.makeText(getApplicationContext(),"TEST1",Toast.LENGTH_SHORT).show();
+        }
 
     }
+
+    /**
+     TODO: Implement turn on LED function
+     */
+    public void turnOffLED() {
+
+    }
+
+    /**
+     TODO: Implement turn off LED function
+     */
+    public void turnOnLED() {
+
+    }
+
+    /**
+     * TODO: Adjust temperature function
+     */
+    public void adjustTemp() {
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
