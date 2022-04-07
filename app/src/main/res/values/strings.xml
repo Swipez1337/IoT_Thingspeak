@@ -5,11 +5,17 @@
     <string name="first_fragment_label">Home temperature regulator</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
+    <string name="change">Change</string>
     <string name="previous">Previous</string>
-    <string name="thingspeakAction_LEDon">Turn on LED</string>
-    <string name="thingspeakAction_LEDoff">Turn off LED</string>
+    <string name="thingspeakAction_LEDon">On</string>
+    <string name="thingspeakAction_LEDoff">Off</string>
     <string name="thingspeak_temp">Room temperature</string>
     <string name="settings_desc">Settings section of the app</string>
+    <string name="fanStatus">Fan status</string>
+    <string name="ledStatus">LED status</string>
+    <string name="Reload">Reload data</string>
+    <string name="Thingspeak_account">ThingSpeak account settings</string>
+    <string name="Account_preferences">Account preferences</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>

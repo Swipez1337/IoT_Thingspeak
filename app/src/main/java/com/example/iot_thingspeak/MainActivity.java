@@ -2,8 +2,6 @@ package com.example.iot_thingspeak;
 
 import android.os.Bundle;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
@@ -28,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
     // Declaring public variables
     int readTemp1 ;
     int wantedTemp1 ;
-    boolean status ;
-    boolean testStatus = true;
+    boolean ledStatus, fanStatus;
+    boolean testStatus = false;
 
 
     @Override
@@ -57,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         });
 */
 
+        //getLedStatus();
 
         //clickButton0();
     }
@@ -64,11 +63,13 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Get LED status via ThingSpeak API
      */
-    public void getLedStatus() {
-        if (true) {
-            status = true;
+    public void getLedStatus(View view) {
+        if (ledStatus) {
+            TextView textView = (TextView) findViewById(R.id.textview2);
+            textView.setText(getString(R.string.thingspeakAction_LEDon));
         } else {
-            status = false;
+            TextView textView = (TextView) findViewById(R.id.textview2);
+            textView.setText(getString(R.string.thingspeakAction_LEDoff));
         }
     }
 
@@ -90,21 +91,81 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Get fan status via ThingSpeak API
+     */
+    public void getFanStatus(View view) {
+        //fanStatus = true || false;
+        if (ledStatus) {
+            TextView textView = (TextView) findViewById(R.id.textview5);
+            textView.setText(getString(R.string.thingspeakAction_LEDon));
+        } else {
+            TextView textView = (TextView) findViewById(R.id.textview5);
+            textView.setText(getString(R.string.thingspeakAction_LEDoff));
+        }
+    }
+
+
+    /**
+     * Set fan status
+     */
+    public void setFanStatus(View view) {
+        fanStatus = !fanStatus;
+    }
+
+    public void updateData(View view){
+        getLedStatus(view);
+        getFanStatus(view);
+    }
+
 
     public void clickButton0(View view) {
 
         //Testing with turning on/off LED
-        if (status) { //turned on, turn off
-            status = false;
+        if (ledStatus) { //turned on, turn off
+            ledStatus = false;
             turnOffLED();
         } else { //turned off, turn on
-            status = true;
+            ledStatus = true;
             turnOnLED();
         }
 
         //Update view of LED status
         TextView textView = (TextView) findViewById(R.id.textview2);
-        if (status){
+        if (ledStatus){
+            textView.setText(getString(R.string.thingspeakAction_LEDon));
+
+        } else {
+            textView.setText(getString(R.string.thingspeakAction_LEDoff));
+        }
+
+        /*
+        //Update view of temperature
+        TextView textView = (TextView) findViewById(R.id.textview2);
+        textView.setText(String.valueOf(temperatureVal1));
+*/
+
+        if (testStatus) {
+            Toast.makeText(getApplicationContext(),"TEST1",Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
+    public void clickButton2(View view) {
+
+        //Testing with turning on/off LED
+        if (ledStatus) { //turned on, turn off
+            ledStatus = false;
+            turnOffLED();
+        } else { //turned off, turn on
+            ledStatus = true;
+            turnOnLED();
+        }
+
+        //Update view of LED status
+        TextView textView = (TextView) findViewById(R.id.textview5);
+        if (ledStatus){
             textView.setText(getString(R.string.thingspeakAction_LEDon));
 
         } else {
