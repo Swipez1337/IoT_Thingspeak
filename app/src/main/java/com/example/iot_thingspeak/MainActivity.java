@@ -146,42 +146,19 @@ public class MainActivity extends AppCompatActivity {
     public void updateData(View view) {
         setWantedTemp(wantedTemp1); // set wanted temp via api call
 
-
         fetchData(view); //update visual representation??
     }
 
 
     public void fetchData(View view){
-        getLedStatus(view);
         getFanStatus(view);
         getTempStatus(view); //currently sets a fixed value!!
     }
 
     public void clickButton0(View view) {
 
-        //Testing with turning on/off LED
-        if (ledStatus) { //turned on, turn off
-            ledStatus = false;
-            turnOffLED();
-        } else { //turned off, turn on
-            ledStatus = true;
-            turnOnLED();
-        }
 
-        //Update view of LED status
-        TextView textView = (TextView) findViewById(R.id.textview2);
-        if (ledStatus) {
-            textView.setText(getString(R.string.thingspeakAction_LEDon));
 
-        } else {
-            textView.setText(getString(R.string.thingspeakAction_LEDoff));
-        }
-
-        /*
-        //Update view of temperature
-        TextView textView = (TextView) findViewById(R.id.textview2);
-        textView.setText(String.valueOf(temperatureVal1));
-*/
 
         if (testStatus) {
             Toast.makeText(getApplicationContext(), "TEST1", Toast.LENGTH_SHORT).show();
@@ -194,6 +171,10 @@ public class MainActivity extends AppCompatActivity {
     public void clickButton2(View view) {
         //request current temp
 
+        //getCurrentTemp();
+
+        Log.d("something", getField2());
+        /*
         String url = "https://api.thingspeak.com/channels/1710056/fields/2.json?api_key=D5UZ9WBG9IXRLLTD&results=1";
 
 
@@ -223,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
                         JSONObject field1 = responseObj.getJSONObject(0);
                         Log.d("e1", field1.toString());//responseObj.toString());
                         String field1_2 = field1.get("field2").toString();
+                        setField2(field1_2);
                         Log.d("e2", field1_2.toString());//responseObj.toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -237,6 +219,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         queue.add(jsonArrayRequest);
+
+
+
+        */
+
+
+
+
 
         /*
         //Testing with turning on/off LED
@@ -278,9 +268,15 @@ public class MainActivity extends AppCompatActivity {
     //decrement temp
     public void clickButton3(View view) {
 
-        getCurrentTemp(/*null, */ view);
+        getCurrentTemp();
+
         //Toast.makeText(MainActivity.this, test, Toast.LENGTH_SHORT).show();
 
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Log.d("something", getField2());
 
         /*
@@ -311,27 +307,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-public void printme(String string){
-    Log.d("ThisAString", string);
-    //test = string;
-}
 
-/*
-    public interface VolleyCallback{
-        void onSuccess(String result);
-    }
-
-
-    public void onSuccess(String result){
-        test = result;
-    }
-*/
 
     //Inspiration for API read: https://www.geeksforgeeks.org/how-to-extract-data-from-json-array-in-android-using-volley-library/
-    public int getCurrentTemp(/*final VolleyCallback callback,*/ View view) {
-
-        final String[] something = {"1.1"};
-        final String[] currentString = new String[1];
+    public int getCurrentTemp(/* View view*/) {
         String url = "https://api.thingspeak.com/channels/1710056/fields/2.json?api_key=D5UZ9WBG9IXRLLTD&results=1";
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext()); //(MainActivity.this);
@@ -347,22 +326,17 @@ public void printme(String string){
                     JSONObject field2JsonObject = responseObj.getJSONObject(0);
 
                     String field2local = field2JsonObject.get("field2").toString();
-                    //currentString[0] = field2;
 
+                    /*
                     if (field2local == "null" || field2local == null || field2local == "0") {
                         field2local = "29.20315";
                     }
-                    something[0] = field2local;
-                    test = field2local;
+
+                     */
                     Log.d("Field2 contents: ", field2local);
-                    Log.d("new", test);
-                    Log.d("newarray", something[0]);
-
-                    //printme(field2local);
-
-                    //callback.onSuccess(field2);
 
                     setField2(field2local);
+                    Log.d("this", getField2());
 
                     //TextView textView = (TextView) findViewById(R.id.textview2);
                     //textView.setText(String.valueOf(field2));
@@ -380,8 +354,6 @@ public void printme(String string){
             }
         });
         queue.add(jsonArrayRequest);
-        //Log.d("newarray2", something[0]);
-        //Log.d("new2", test);
 
         //convert temp string to float
         /*
@@ -455,19 +427,6 @@ public void printme(String string){
 
     }
 
-    /**
-     * TODO: Implement turn on LED function
-     */
-    public void turnOffLED() {
-
-    }
-
-    /**
-     * TODO: Implement turn off LED function
-     */
-    public void turnOnLED() {
-
-    }
 
 
     @Override
