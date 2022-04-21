@@ -13,7 +13,7 @@
     <string name="settings_desc">Settings section of the app</string>
     <string name="fanStatus">Fan status</string>
     <string name="ledStatus">LED status</string>
-    <string name="Reload">Reload data</string>
+    <string name="Reload">Update data</string>
     <string name="Thingspeak_account">ThingSpeak account settings</string>
     <string name="Account_preferences">Account preferences</string>
     <string name="increment">+</string>

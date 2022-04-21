@@ -59,6 +59,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
+
+
+    public String getFanStatus(String string){
+
+        return "";
+    }
+
+
+
+
     /**
      * Get LED status via ThingSpeak API
      */
@@ -125,12 +137,24 @@ public class MainActivity extends AppCompatActivity {
         fanStatus = !fanStatus;
     }
 
+
+    /**
+     * Function to send API calls to ThingSpeak as well as call a view update of values
+     * @param view
+     */
     public void updateData(View view) {
+        setWantedTemp(wantedTemp1); // set wanted temp via api call
+
+
+        fetchData(view); //update visual representation??
+    }
+
+
+    public void fetchData(View view){
         getLedStatus(view);
         getFanStatus(view);
         getTempStatus(view); //currently sets a fixed value!!
     }
-
 
     public void clickButton0(View view) {
 
@@ -165,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //Inspiration for API read: https://www.geeksforgeeks.org/how-to-extract-data-from-json-array-in-android-using-volley-library/
     public void clickButton2(View view) {
         //request current temp
 
@@ -212,60 +237,6 @@ public class MainActivity extends AppCompatActivity {
         });
         queue.add(jsonArrayRequest);
 
-
-/*
-        String url = "https://api.thingspeak.com/channels/1710056/fields/1.json?api_key=D5UZ9WBG9IXRLLTD&results=1";
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("tag", response.toString());
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-
-                    }
-                });
-        */
-
-        /*
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://api.thingspeak.com/channels/1710056/fields/1.json?api_key=D5UZ9WBG9IXRLLTD&results=1";
-
-// Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //System.out.println("Response" + response.substring(0,500));
-                        // Display the first 500 characters of the response string.
-
-
-                        Log.d("Req", response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("error", "Error");
-                //System.out.println("Error");
-            }
-        });
-
-// Add the request to the RequestQueue.
-        queue.add(stringRequest);
-
-
-*/
-
-
-
         /*
         //Testing with turning on/off LED
         if (ledStatus) { //turned on, turn off
@@ -302,9 +273,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setRepoListText(String error_while_calling_rest_api) {
-        Log.d("a","a");
-    }
 
     //decrement temp
     public void clickButton3(View view) {
@@ -322,28 +290,85 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //increment temp
-    public void clickButton4(View view) {
+
+
+    //Inspiration for API read: https://www.geeksforgeeks.org/how-to-extract-data-from-json-array-in-android-using-volley-library/
+    public int getCurrentTemp() {
+
+        String url = "https://api.thingspeak.com/channels/1710056/fields/2.json?api_key=D5UZ9WBG9IXRLLTD&results=1";
+
+
+        // creating a new variable for our request queue
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext()); //(MainActivity.this);
+        // in this case the data we are getting is in the form of array so we are making a json array request.
+        // below is the line where we are making an json array request and then extracting data from each json object.
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                // creating a new json object and getting each object from our json array.
+                Log.d("a", response.toString());
+                try {
+                    // we are getting each json object.
+                    JSONArray responseObj = response.getJSONArray("feeds");
+
+                    Log.d("b", responseObj.toString());
+                    // now we get our response from API in json object format.
+                    // in below line we are extracting a string with its key value from our json object.
+                    // similarly we are extracting all the strings from our json object.
+                    JSONObject field1 = responseObj.getJSONObject(0);
+                    Log.d("e", field1.toString());
+                    String field1_2 = field1.get("field2").toString();
+                    Log.d("e", field1_2.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("catch block", response.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MainActivity.this, "Fail to get the data..", Toast.LENGTH_SHORT).show();
+                Log.d("error response", error.toString());
+            }
+        });
+        queue.add(jsonArrayRequest);
+
+
+        return 1;
+    }
+
+
+
+
+
+
+
+    //Inspiration for API write: https://google.github.io/volley/simple.html
+    public void setWantedTemp(int wantedTemp){
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://api.thingspeak.com/update?api_key=SOR94XAST8J94V4W&field1=" + 30 ;//wantedTemp1;
+        String apiUrl = "https://api.thingspeak.com/update?api_key=SOR94XAST8J94V4W&field1=" + wantedTemp ;
 
-// Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+// Request a string response from the provided API URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl,
 
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         //System.out.println("Response" + response.substring(0,500));
                         // Display the first 500 characters of the response string.
-                        Log.d("Req", response);
+                        Log.d("Wanted temperature: ", wantedTemp + " . Response id: " + response + " .");
+
+                        if (response == null || response.equals("0")) { //if user is too quick and response is therefore 0
+                            Log.d("Error", "User refreshed too soon");
+                            Toast.makeText(MainActivity.this, "You are too fast for our servers to handle. Please wait a few seconds and try again", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("error", "Error");
-                //System.out.println("Error");
+                Log.d("setWantedTemp_error", "An error has occured");
             }
         });
 
@@ -351,17 +376,16 @@ public class MainActivity extends AppCompatActivity {
         queue.add(stringRequest);
 
 
+        //return "";
+    }
 
 
+    //increment temp button
+    public void clickButton4(View view) {
 
-
-
-
-
-
-        /*
         if (initTemp) {
-            updateData(view);
+            fetchData(view);
+            initTemp = false;
         } //in case values have not been read yet
 
         wantedTemp1++;
@@ -369,7 +393,8 @@ public class MainActivity extends AppCompatActivity {
         TextView textView = (TextView) findViewById(R.id.textview6);
         textView.setText(String.valueOf(wantedTemp1));
 
-*/
+        //wantedTemp1 = 22;
+
     }
 
     /**
@@ -383,13 +408,6 @@ public class MainActivity extends AppCompatActivity {
      * TODO: Implement turn off LED function
      */
     public void turnOnLED() {
-
-    }
-
-    /**
-     * TODO: Adjust temperature function
-     */
-    public void adjustTemp() {
 
     }
 
