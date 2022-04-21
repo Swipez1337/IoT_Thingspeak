@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     int tempCounter = 0;
     boolean ledStatus, fanStatus, initTemp = true, testStatus = false;
     String test;
-    String field2;
+    String field2, field3;
 
 
     @Override
@@ -153,15 +153,26 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     public void updateData(View view) {
 
+
+
         getCurrentTemp(); //get current temp via api call
+        getCurrentFanspeed(); //get current fan speed via api call
         updateView(view); //update views testing
         tempCounter ++;
 
         if (tempCounter > 1) { //CURRENT ISSUE: It only updates the first time after it has been pressed twice. This counter is therefore to be removed at a later time.
             TextView textView = (TextView) findViewById(R.id.textview5); //view current rounded temp
+
+            //BE AWARE THE BELOW 2 LINES CURRENTLY CRASHES THE CODE IF IT IS NULL
             textView.setText(Integer.toString(field2Convert(getField2())));
             readTemp1 = field2Convert(getField2());
+
+            //update fan setting
+            TextView textViewfan = (TextView) findViewById(R.id.textview2); //view current fan speed
+            textViewfan.setText(getField3());
+
             tempCounter = 0; //reset temporary counter
+
 
             if (initTemp) {
                 tempInit(view);
@@ -169,6 +180,8 @@ public class MainActivity extends AppCompatActivity {
             else {
                 setWantedTemp(wantedTemp1); // set wanted temp via api call
             }
+
+
         }
 
     }
@@ -184,58 +197,42 @@ public class MainActivity extends AppCompatActivity {
         TextView textView = (TextView) findViewById(R.id.textview5);
         textView.setText(getField2());
 
-
     }
-
 
     public void fetchData(View view){
         //getFanStatus(view);
         getTempStatus(view); //currently sets a fixed value!!
     }
 
-    //high button
+    //high fan speed button
     public void clickButton0(View view) {
         setFanSpeed(2); //2 is high setting
 
         TextView textView = (TextView) findViewById(R.id.textview2); //update view
         textView.setText("High");
 
-
         //Log.d("a", Integer.toString(field2Convert("21.95032")));
         //Log.d("a", Integer.toString(field2Convert(getField2())));
-        //Toast.makeText(getApplicationContext(), , Toast.LENGTH_SHORT).show();
-
-/*
-        if (testStatus) {
-            Toast.makeText(getApplicationContext(), "TEST1", Toast.LENGTH_SHORT).show();
-        }
-*/
     }
 
 
-    //medium button
-    //Inspiration for API read: https://www.geeksforgeeks.org/how-to-extract-data-from-json-array-in-android-using-volley-library/
+    //medium fan speed button
     public void clickButton2(View view) {
+        setFanSpeed(1); //1 is medium setting
 
-
-
-
-
-        /*
-        //Update view of temperature
-        TextView textView = (TextView) findViewById(R.id.textview2);
-        textView.setText(String.valueOf(temperatureVal1));
-*/
-
-        /*
-        if (testStatus) {
-            Toast.makeText(getApplicationContext(), "TEST1", Toast.LENGTH_SHORT).show();
-        }
-       */
-
+        TextView textView = (TextView) findViewById(R.id.textview2); //update view
+        textView.setText("Medium");
 
     }
 
+    //Off(low) fan speed button
+    public void clickButton5(View view) {
+        setFanSpeed(0); //0 is low/off setting
+
+        TextView textView = (TextView) findViewById(R.id.textview2); //update view
+        textView.setText("Off");
+
+    }
 
     //decrement temp
     public void clickButton3(View view) {
@@ -299,20 +296,10 @@ public class MainActivity extends AppCompatActivity {
 
                     String field2local = field2JsonObject.get("field2").toString();
 
-                    /*
-                    if (field2local == "null" || field2local == null || field2local == "0") {
-                        field2local = "29.20315";
-                    }
-
-                     */
                     Log.d("Field2 contents: ", field2local);
 
                     setField2(field2local);
                     Log.d("this", getField2());
-
-                    //TextView textView = (TextView) findViewById(R.id.textview2);
-                    //textView.setText(String.valueOf(field2));
-
 
                 } catch (JSONException e) {
                     Log.d("GetCurrentTemp catch: ", response.toString());
@@ -326,25 +313,46 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         queue.add(jsonArrayRequest);
-
-        //convert temp string to float
-        /*
-        float f = Float.parseFloat(currentString[0]);
-
-
-        //round float to int
-        int currTemp = Math.round(f);
-
-        return currTemp;
-
-
-         */
-        //return 1;
     }
 
 
 
+    //Inspiration for API read: https://www.geeksforgeeks.org/how-to-extract-data-from-json-array-in-android-using-volley-library/
+    public void getCurrentFanspeed() {
+        String url = "https://api.thingspeak.com/channels/1710056/fields/3.json?api_key=D5UZ9WBG9IXRLLTD&results=1";
 
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext()); //(MainActivity.this);
+
+        //get json array contents
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    //Select JSON array
+                    JSONArray responseObj = response.getJSONArray("feeds");
+                    //Select JSON object //field2JsonObject.toString())
+                    JSONObject field3JsonObject = responseObj.getJSONObject(0);
+
+                    String field3local = field3JsonObject.get("field3").toString();
+
+                    Log.d("Field3 contents: ", field3local);
+
+                    setField3(field3local);
+                    Log.d("this", getField3());
+
+                } catch (JSONException e) {
+                    Log.d("GetCurrentTemp catch: ", response.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MainActivity.this, "Data unavailable. Please try again in 10 seconds", Toast.LENGTH_SHORT).show();
+                Log.d("GetCurrentFan response", error.toString());
+            }
+        });
+        queue.add(jsonArrayRequest);
+    }
 
 
 
@@ -483,6 +491,13 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("a", Integer.toString(currTemp));
         return currTemp;
+    }
 
+    public void setField3(String field3){
+        this.field3 = field3;
+    }
+
+    public String getField3(){
+        return field3;
     }
 }
