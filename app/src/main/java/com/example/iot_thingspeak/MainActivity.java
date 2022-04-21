@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     // Declaring public variables
     int readTemp1;
     int wantedTemp1;
+    int wantedFanSpeed;
     int tempCounter = 0;
     boolean ledStatus, fanStatus, initTemp = true, testStatus = false;
     String test;
@@ -194,11 +195,14 @@ public class MainActivity extends AppCompatActivity {
 
     //high button
     public void clickButton0(View view) {
+        setFanSpeed(2); //2 is high setting
 
+        TextView textView = (TextView) findViewById(R.id.textview2); //update view
+        textView.setText("High");
 
 
         //Log.d("a", Integer.toString(field2Convert("21.95032")));
-        Log.d("a", Integer.toString(field2Convert(getField2())));
+        //Log.d("a", Integer.toString(field2Convert(getField2())));
         //Toast.makeText(getApplicationContext(), , Toast.LENGTH_SHORT).show();
 
 /*
@@ -445,6 +449,40 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("setWantedTemp_error", "An error has occured");
+            }
+        });
+
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+
+    //Inspiration for API write: https://google.github.io/volley/simple.html
+    public void setFanSpeed(int wantedFanSpeed){
+
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String apiUrl = "https://api.thingspeak.com/update?api_key=SOR94XAST8J94V4W&field3=" + wantedFanSpeed ;
+
+// Request a string response from the provided API URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl,
+
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //System.out.println("Response" + response.substring(0,500));
+                        // Display the first 500 characters of the response string.
+                        Log.d("Wanted fanspeed: ", wantedFanSpeed + " . Response id: " + response + " .");
+
+                        if (response == null || response.equals("0")) { //if user is too quick and response is therefore 0
+                            Log.d("Error", "User refreshed too soon");
+                            Toast.makeText(MainActivity.this, "You are too fast for our servers to handle. Please wait a few seconds and try again", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("setWantedFan_error", "An error has occured");
             }
         });
 
