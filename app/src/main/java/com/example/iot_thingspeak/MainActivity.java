@@ -216,86 +216,11 @@ public class MainActivity extends AppCompatActivity {
     //medium button
     //Inspiration for API read: https://www.geeksforgeeks.org/how-to-extract-data-from-json-array-in-android-using-volley-library/
     public void clickButton2(View view) {
-        //request current temp
-
-        //getCurrentTemp();
-
-        //Log.d("something", getField2());
-
-        String url = "https://api.thingspeak.com/channels/1710056/fields/2.json?api_key=D5UZ9WBG9IXRLLTD&results=1";
-
-
-        // creating a new variable for our request queue
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext()); //(MainActivity.this);
-        // in this case the data we are getting is in the form
-        // of array so we are making a json array request.
-        // below is the line where we are making an json array
-        // request and then extracting data from each json object.
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                //progressBar.setVisibility(View.GONE);
-                //courseRV.setVisibility(View.VISIBLE);
-                    // creating a new json object and
-                    // getting each object from our json array.
-                Log.d("a", response.toString());
-                    try {
-                        // we are getting each json object.
-                        JSONArray responseObj = response.getJSONArray("feeds");
-
-                        Log.d("b", responseObj.toString());
-                        // now we get our response from API in json object format.
-                        // in below line we are extracting a string with
-                        // its key value from our json object.
-                        // similarly we are extracting all the strings from our json object.
-                        JSONObject field1 = responseObj.getJSONObject(0);
-                        Log.d("e1", field1.toString());//responseObj.toString());
-                        String field1_2 = field1.get("field2").toString();
-                        setField2(field1_2);
-                        Log.d("e2", field1_2.toString());//responseObj.toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Log.d("catch block", response.toString());
-                    }
-                }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, "Fail to get the data..", Toast.LENGTH_SHORT).show();
-                Log.d("error response", error.toString());
-            }
-        });
-        queue.add(jsonArrayRequest);
 
 
 
 
 
-
-
-
-
-        /*
-        //Testing with turning on/off LED
-        if (ledStatus) { //turned on, turn off
-            ledStatus = false;
-            turnOffLED();
-        } else { //turned off, turn on
-            ledStatus = true;
-            turnOnLED();
-        }
-
-        //Update view of LED status
-        TextView textView = (TextView) findViewById(R.id.textview5);
-        if (ledStatus) {
-            textView.setText(getString(R.string.thingspeakAction_LEDon));
-
-        } else {
-            textView.setText(getString(R.string.thingspeakAction_LEDoff));
-        }
-
-
-         */
         /*
         //Update view of temperature
         TextView textView = (TextView) findViewById(R.id.textview2);
