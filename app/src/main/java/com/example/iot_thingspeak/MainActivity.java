@@ -1,5 +1,6 @@
 package com.example.iot_thingspeak;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     // Declaring public variables
     int readTemp1;
     int wantedTemp1;
+    int tempCounter = 0;
     boolean ledStatus, fanStatus, initTemp = true, testStatus = false;
     String test;
     String field2;
@@ -88,8 +90,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void tempInit(View view) {
         if (initTemp) {
-            readTemp1 = 25;
+            wantedTemp1 = readTemp1 ;
             initTemp = false;
+
+            //update view of wanted temp
+            TextView textView = (TextView) findViewById(R.id.textview6);
+            textView.setText(String.valueOf(wantedTemp1));
         }
     }
 
@@ -143,38 +149,75 @@ public class MainActivity extends AppCompatActivity {
      * Function to send API calls to ThingSpeak as well as call a view update of values
      * @param view
      */
+    @SuppressLint("SetTextI18n")
     public void updateData(View view) {
-        setWantedTemp(wantedTemp1); // set wanted temp via api call
 
-        fetchData(view); //update visual representation??
-    }
+        getCurrentTemp(); //get current temp via api call
+        updateView(view); //update views testing
+        tempCounter ++;
 
+        if (tempCounter > 1) { //CURRENT ISSUE: It only updates the first time after it has been pressed twice. This counter is therefore to be removed at a later time.
+            TextView textView = (TextView) findViewById(R.id.textview5); //view current rounded temp
+            textView.setText(Integer.toString(field2Convert(getField2())));
+            readTemp1 = field2Convert(getField2());
+            tempCounter = 0; //reset temporary counter
 
-    public void fetchData(View view){
-        getFanStatus(view);
-        getTempStatus(view); //currently sets a fixed value!!
-    }
-
-    public void clickButton0(View view) {
-
-
-
-
-        if (testStatus) {
-            Toast.makeText(getApplicationContext(), "TEST1", Toast.LENGTH_SHORT).show();
+            if (initTemp) {
+                tempInit(view);
+            }
+            else {
+                setWantedTemp(wantedTemp1); // set wanted temp via api call
+            }
         }
 
     }
 
 
+    /**
+     * Function to update view of the different values
+     * @param view
+     */
+    public void updateView(View view){
+
+        //current temp val
+        TextView textView = (TextView) findViewById(R.id.textview5);
+        textView.setText(getField2());
+
+
+    }
+
+
+    public void fetchData(View view){
+        //getFanStatus(view);
+        getTempStatus(view); //currently sets a fixed value!!
+    }
+
+    //high button
+    public void clickButton0(View view) {
+
+
+
+        //Log.d("a", Integer.toString(field2Convert("21.95032")));
+        Log.d("a", Integer.toString(field2Convert(getField2())));
+        //Toast.makeText(getApplicationContext(), , Toast.LENGTH_SHORT).show();
+
+/*
+        if (testStatus) {
+            Toast.makeText(getApplicationContext(), "TEST1", Toast.LENGTH_SHORT).show();
+        }
+*/
+    }
+
+
+    //medium button
     //Inspiration for API read: https://www.geeksforgeeks.org/how-to-extract-data-from-json-array-in-android-using-volley-library/
     public void clickButton2(View view) {
         //request current temp
 
         //getCurrentTemp();
 
-        Log.d("something", getField2());
-        /*
+        //Log.d("something", getField2());
+
         String url = "https://api.thingspeak.com/channels/1710056/fields/2.json?api_key=D5UZ9WBG9IXRLLTD&results=1";
 
 
@@ -222,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        */
+
 
 
 
@@ -310,7 +353,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     //Inspiration for API read: https://www.geeksforgeeks.org/how-to-extract-data-from-json-array-in-android-using-volley-library/
-    public int getCurrentTemp(/* View view*/) {
+    public void getCurrentTemp(/* View view*/) {
         String url = "https://api.thingspeak.com/channels/1710056/fields/2.json?api_key=D5UZ9WBG9IXRLLTD&results=1";
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext()); //(MainActivity.this);
@@ -367,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
 
 
          */
-        return 1;
+        //return 1;
     }
 
 
@@ -464,5 +507,19 @@ public class MainActivity extends AppCompatActivity {
 
     public String getField2(){
         return field2;
+    }
+
+    public int field2Convert(String field2){
+        //string to double
+        double d = Double.parseDouble(field2);
+
+        //round double to int
+        int currTemp = (int) Math.round(d);
+
+        //int to string
+
+        Log.d("a", Integer.toString(currTemp));
+        return currTemp;
+
     }
 }
