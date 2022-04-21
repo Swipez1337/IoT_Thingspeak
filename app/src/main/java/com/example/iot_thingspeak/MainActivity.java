@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     /**
      * Function to send API calls to ThingSpeak as well as call a view update of values
      * @param view
@@ -112,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
                     setWantedTemp(wantedTemp1); // set wanted temp via api call
                 }
             }
-
         }
     }
 
