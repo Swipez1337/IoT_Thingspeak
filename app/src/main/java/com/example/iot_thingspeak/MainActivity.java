@@ -16,7 +16,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -41,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     int wantedTemp1;
     boolean ledStatus, fanStatus, initTemp = true, testStatus = false;
     String test;
+    String field2;
 
 
     @Override
@@ -278,9 +278,18 @@ public class MainActivity extends AppCompatActivity {
     //decrement temp
     public void clickButton3(View view) {
 
-        getCurrentTemp();
+        getCurrentTemp(/*null, */ view);
         //Toast.makeText(MainActivity.this, test, Toast.LENGTH_SHORT).show();
 
+        Log.d("something", getField2());
+
+        /*
+        TextView textView = (TextView) findViewById(R.id.textview2);
+        test = textView.getText().toString();
+        Toast.makeText(MainActivity.this, test , Toast.LENGTH_SHORT).show();
+
+
+         */
 
         //wantedTemp1 = getCurrentTemp();
         //TextView textView = (TextView) findViewById(R.id.textview6);
@@ -302,11 +311,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+public void printme(String string){
+    Log.d("ThisAString", string);
+    //test = string;
+}
 
+/*
+    public interface VolleyCallback{
+        void onSuccess(String result);
+    }
+
+
+    public void onSuccess(String result){
+        test = result;
+    }
+*/
 
     //Inspiration for API read: https://www.geeksforgeeks.org/how-to-extract-data-from-json-array-in-android-using-volley-library/
-    public int getCurrentTemp() {
+    public int getCurrentTemp(/*final VolleyCallback callback,*/ View view) {
 
+        final String[] something = {"1.1"};
         final String[] currentString = new String[1];
         String url = "https://api.thingspeak.com/channels/1710056/fields/2.json?api_key=D5UZ9WBG9IXRLLTD&results=1";
 
@@ -322,15 +346,27 @@ public class MainActivity extends AppCompatActivity {
                     //Select JSON object //field2JsonObject.toString())
                     JSONObject field2JsonObject = responseObj.getJSONObject(0);
 
-                    String field2 = field2JsonObject.get("field2").toString();
+                    String field2local = field2JsonObject.get("field2").toString();
                     //currentString[0] = field2;
 
-                    if (field2 == "null" || field2 == null || field2 == "0") {
-                        field2 = "29.20315";
+                    if (field2local == "null" || field2local == null || field2local == "0") {
+                        field2local = "29.20315";
                     }
-                    test = field2;
-                    Log.d("Field2 contents: ", field2);
+                    something[0] = field2local;
+                    test = field2local;
+                    Log.d("Field2 contents: ", field2local);
                     Log.d("new", test);
+                    Log.d("newarray", something[0]);
+
+                    //printme(field2local);
+
+                    //callback.onSuccess(field2);
+
+                    setField2(field2local);
+
+                    //TextView textView = (TextView) findViewById(R.id.textview2);
+                    //textView.setText(String.valueOf(field2));
+
 
                 } catch (JSONException e) {
                     Log.d("GetCurrentTemp catch: ", response.toString());
@@ -344,7 +380,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         queue.add(jsonArrayRequest);
-        Log.d("new2", test);
+        //Log.d("newarray2", something[0]);
+        //Log.d("new2", test);
 
         //convert temp string to float
         /*
@@ -460,5 +497,13 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void setField2(String field2){
+        this.field2 = field2;
+    }
+
+    public String getField2(){
+        return field2;
     }
 }
