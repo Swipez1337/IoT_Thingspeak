@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     int readTemp1;
     int wantedTemp1;
     boolean ledStatus, fanStatus, initTemp = true, testStatus = false;
+    String test;
 
 
     @Override
@@ -220,9 +221,9 @@ public class MainActivity extends AppCompatActivity {
                         // its key value from our json object.
                         // similarly we are extracting all the strings from our json object.
                         JSONObject field1 = responseObj.getJSONObject(0);
-                        Log.d("e", field1.toString());//responseObj.toString());
+                        Log.d("e1", field1.toString());//responseObj.toString());
                         String field1_2 = field1.get("field2").toString();
-                        Log.d("e", field1_2.toString());//responseObj.toString());
+                        Log.d("e2", field1_2.toString());//responseObj.toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Log.d("catch block", response.toString());
@@ -276,6 +277,15 @@ public class MainActivity extends AppCompatActivity {
 
     //decrement temp
     public void clickButton3(View view) {
+
+        getCurrentTemp();
+        //Toast.makeText(MainActivity.this, test, Toast.LENGTH_SHORT).show();
+
+
+        //wantedTemp1 = getCurrentTemp();
+        //TextView textView = (TextView) findViewById(R.id.textview6);
+        //textView.setText(String.valueOf(wantedTemp1));
+        /*
         if (initTemp) {
             updateData(view);
         } //in case values have not been read yet
@@ -287,6 +297,8 @@ public class MainActivity extends AppCompatActivity {
             textView.setText(String.valueOf(wantedTemp1));
 
         }
+
+         */
     }
 
 
@@ -295,45 +307,57 @@ public class MainActivity extends AppCompatActivity {
     //Inspiration for API read: https://www.geeksforgeeks.org/how-to-extract-data-from-json-array-in-android-using-volley-library/
     public int getCurrentTemp() {
 
+        final String[] currentString = new String[1];
         String url = "https://api.thingspeak.com/channels/1710056/fields/2.json?api_key=D5UZ9WBG9IXRLLTD&results=1";
 
-
-        // creating a new variable for our request queue
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext()); //(MainActivity.this);
-        // in this case the data we are getting is in the form of array so we are making a json array request.
-        // below is the line where we are making an json array request and then extracting data from each json object.
+
+        //get json array contents
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                // creating a new json object and getting each object from our json array.
-                Log.d("a", response.toString());
                 try {
-                    // we are getting each json object.
+                    //Select JSON array
                     JSONArray responseObj = response.getJSONArray("feeds");
+                    //Select JSON object //field2JsonObject.toString())
+                    JSONObject field2JsonObject = responseObj.getJSONObject(0);
 
-                    Log.d("b", responseObj.toString());
-                    // now we get our response from API in json object format.
-                    // in below line we are extracting a string with its key value from our json object.
-                    // similarly we are extracting all the strings from our json object.
-                    JSONObject field1 = responseObj.getJSONObject(0);
-                    Log.d("e", field1.toString());
-                    String field1_2 = field1.get("field2").toString();
-                    Log.d("e", field1_2.toString());
+                    String field2 = field2JsonObject.get("field2").toString();
+                    //currentString[0] = field2;
+
+                    if (field2 == "null" || field2 == null || field2 == "0") {
+                        field2 = "29.20315";
+                    }
+                    test = field2;
+                    Log.d("Field2 contents: ", field2);
+                    Log.d("new", test);
+
                 } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.d("catch block", response.toString());
+                    Log.d("GetCurrentTemp catch: ", response.toString());
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, "Fail to get the data..", Toast.LENGTH_SHORT).show();
-                Log.d("error response", error.toString());
+                Toast.makeText(MainActivity.this, "Data unavailable. Please try again in 10 seconds", Toast.LENGTH_SHORT).show();
+                Log.d("GetCurrentTemp response", error.toString());
             }
         });
         queue.add(jsonArrayRequest);
+        Log.d("new2", test);
+
+        //convert temp string to float
+        /*
+        float f = Float.parseFloat(currentString[0]);
 
 
+        //round float to int
+        int currTemp = Math.round(f);
+
+        return currTemp;
+
+
+         */
         return 1;
     }
 
@@ -374,9 +398,6 @@ public class MainActivity extends AppCompatActivity {
 
 // Add the request to the RequestQueue.
         queue.add(stringRequest);
-
-
-        //return "";
     }
 
 
