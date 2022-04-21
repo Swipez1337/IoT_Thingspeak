@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     int wantedFanSpeed;
     int tempCounter = 0;
     boolean ledStatus, fanStatus, initTemp = true, testStatus = false;
-    String test;
     String field2, field3;
 
 
@@ -63,32 +62,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
-
-
-    public String getFanStatus(String string){
-
-        return "";
-    }
-
-
-
-
     /**
-     * Get LED status via ThingSpeak API
+     * Initialize temperatures one time when opening app
+     * @param view
      */
-    public void getLedStatus(View view) {
-        if (ledStatus) {
-            TextView textView = (TextView) findViewById(R.id.textview2);
-            textView.setText(getString(R.string.thingspeakAction_LEDon));
-        } else {
-            TextView textView = (TextView) findViewById(R.id.textview2);
-            textView.setText(getString(R.string.thingspeakAction_LEDoff));
-        }
-    }
-
-
     public void tempInit(View view) {
         if (initTemp) {
             wantedTemp1 = readTemp1 ;
@@ -102,58 +79,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * Get temperature status via ThingSpeak API
-     */
-    public void getTempStatus(View view) {
-        tempInit(view);
-        wantedTemp1 = readTemp1;
-
-        TextView textView = (TextView) findViewById(R.id.textview6);
-        textView.setText(String.valueOf(wantedTemp1));
-
-    }
-
-
-    /**
-     * Set wanted temperature
-     */
-    public void setTemp() {
-        wantedTemp1 = 20;
-
-    }
-
-
-    /**
-     * Get fan status via ThingSpeak API
-     */
-    public void getFanStatus(View view) {
-        //fanStatus = true || false;
-        if (ledStatus) {
-            TextView textView = (TextView) findViewById(R.id.textview5);
-            textView.setText(getString(R.string.thingspeakAction_LEDon));
-        } else {
-            TextView textView = (TextView) findViewById(R.id.textview5);
-            textView.setText(getString(R.string.thingspeakAction_LEDoff));
-        }
-    }
-
-
-    /**
-     * Set fan status
-     */
-    public void setFanStatus(View view) {
-        fanStatus = !fanStatus;
-    }
-
-
-    /**
      * Function to send API calls to ThingSpeak as well as call a view update of values
      * @param view
      */
     @SuppressLint("SetTextI18n")
     public void updateData(View view) {
-
-
 
         getCurrentTemp(); //get current temp via api call
         getCurrentFanspeed(); //get current fan speed via api call
@@ -167,23 +97,23 @@ public class MainActivity extends AppCompatActivity {
             textView.setText(Integer.toString(field2Convert(getField2())));
             readTemp1 = field2Convert(getField2());
 
-            //update fan setting
+            //update fan setting //BE AWARE THE BELOW 2 LINES CURRENTLY CAN CRASH THE CODE IF IT IS NULL
             TextView textViewfan = (TextView) findViewById(R.id.textview2); //view current fan speed
             textViewfan.setText(getField3());
 
             tempCounter = 0; //reset temporary counter
 
-
+            //Initialize temperature variables etc.
             if (initTemp) {
                 tempInit(view);
             }
             else {
-                setWantedTemp(wantedTemp1); // set wanted temp via api call
+                if (wantedTemp1 != readTemp1) {
+                    setWantedTemp(wantedTemp1); // set wanted temp via api call
+                }
             }
 
-
         }
-
     }
 
 
@@ -199,12 +129,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void fetchData(View view){
-        //getFanStatus(view);
-        getTempStatus(view); //currently sets a fixed value!!
-    }
-
-    //high fan speed button
+    /**
+     * Method to set the fan speed to highest setting
+     * @param view
+     */
     public void clickButton0(View view) {
         setFanSpeed(2); //2 is high setting
 
@@ -216,7 +144,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //medium fan speed button
+    /**
+     * Method to set the fan speed to medium
+     * @param view
+     */
     public void clickButton2(View view) {
         setFanSpeed(1); //1 is medium setting
 
@@ -225,7 +156,47 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //Off(low) fan speed button
+    /**
+     * Method to decrement the wanted temperature and update the view
+     * @param view
+     */
+    public void clickButton3(View view) {
+
+        if (initTemp) {
+            updateData(view);
+            initTemp = false;
+        } //in case values have not been read yet
+
+        wantedTemp1 --;
+        TextView textView = (TextView) findViewById(R.id.textview6);
+        textView.setText(String.valueOf(wantedTemp1));
+
+    }
+
+
+    /**
+     * Method to increment the wanted temperature and update the view
+     * @param view
+     */
+    public void clickButton4(View view) {
+
+        if (initTemp) {
+            updateData(view);
+            initTemp = false;
+        } //in case values have not been read yet
+
+        wantedTemp1++;
+
+        TextView textView = (TextView) findViewById(R.id.textview6);
+        textView.setText(String.valueOf(wantedTemp1));
+
+    }
+
+
+    /**
+     * Method to turn off the fan
+     * @param view
+     */
     public void clickButton5(View view) {
         setFanSpeed(0); //0 is low/off setting
 
@@ -234,51 +205,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //decrement temp
-    public void clickButton3(View view) {
-
-        getCurrentTemp();
-
-        //Toast.makeText(MainActivity.this, test, Toast.LENGTH_SHORT).show();
-
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Log.d("something", getField2());
-
-        /*
-        TextView textView = (TextView) findViewById(R.id.textview2);
-        test = textView.getText().toString();
-        Toast.makeText(MainActivity.this, test , Toast.LENGTH_SHORT).show();
 
 
-         */
-
-        //wantedTemp1 = getCurrentTemp();
-        //TextView textView = (TextView) findViewById(R.id.textview6);
-        //textView.setText(String.valueOf(wantedTemp1));
-        /*
-        if (initTemp) {
-            updateData(view);
-        } //in case values have not been read yet
-
-        if (wantedTemp1 > 0) { //no negative values
-            wantedTemp1--;
-
-            TextView textView = (TextView) findViewById(R.id.textview6);
-            textView.setText(String.valueOf(wantedTemp1));
-
-        }
-
-         */
-    }
-
-
-
-
-    //Inspiration for API read: https://www.geeksforgeeks.org/how-to-extract-data-from-json-array-in-android-using-volley-library/
+    /**
+     * A method to get the current temperature via an API call to ThingSpeak
+     * This method has inspiration from https://www.geeksforgeeks.org/how-to-extract-data-from-json-array-in-android-using-volley-library/
+     */
     public void getCurrentTemp(/* View view*/) {
         String url = "https://api.thingspeak.com/channels/1710056/fields/2.json?api_key=D5UZ9WBG9IXRLLTD&results=1";
 
@@ -316,8 +248,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    //Inspiration for API read: https://www.geeksforgeeks.org/how-to-extract-data-from-json-array-in-android-using-volley-library/
+    /**
+     * A method to get the current fan speed via API call to ThingSpeak
+     * This method has inspiration from https://www.geeksforgeeks.org/how-to-extract-data-from-json-array-in-android-using-volley-library/
+     */
     public void getCurrentFanspeed() {
         String url = "https://api.thingspeak.com/channels/1710056/fields/3.json?api_key=D5UZ9WBG9IXRLLTD&results=1";
 
@@ -355,7 +289,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * A method to set the wanted temperature via. API call to ThingSpeak
+     * @param wantedTemp
+     * This method has inspiration from https://google.github.io/volley/simple.html
+     */
     //Inspiration for API write: https://google.github.io/volley/simple.html
     public void setWantedTemp(int wantedTemp){
 
@@ -389,8 +327,11 @@ public class MainActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-
-    //Inspiration for API write: https://google.github.io/volley/simple.html
+    /**
+     * Method for API call to set the fan speed 0,1,2 to ThingSpeak
+     * @param wantedFanSpeed
+     * This method has inspiration from https://google.github.io/volley/simple.html
+     */
     public void setFanSpeed(int wantedFanSpeed){
 
         // Instantiate the RequestQueue.
@@ -424,25 +365,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //increment temp button
-    public void clickButton4(View view) {
-
-        if (initTemp) {
-            fetchData(view);
-            initTemp = false;
-        } //in case values have not been read yet
-
-        wantedTemp1++;
-
-        TextView textView = (TextView) findViewById(R.id.textview6);
-        textView.setText(String.valueOf(wantedTemp1));
-
-        //wantedTemp1 = 22;
-
-    }
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -472,14 +394,27 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+    /**
+     * Set method for field2
+     * @param field2
+     */
     public void setField2(String field2){
         this.field2 = field2;
     }
 
+    /**
+     * Get method for field2
+     * @return
+     */
     public String getField2(){
         return field2;
     }
 
+    /**
+     * Convert field2 from string to double to an int
+     * @param field2
+     * @return
+     */
     public int field2Convert(String field2){
         //string to double
         double d = Double.parseDouble(field2);
@@ -487,16 +422,22 @@ public class MainActivity extends AppCompatActivity {
         //round double to int
         int currTemp = (int) Math.round(d);
 
-        //int to string
-
         Log.d("a", Integer.toString(currTemp));
         return currTemp;
     }
 
+    /**
+     * set method for field3
+     * @param field3
+     */
     public void setField3(String field3){
         this.field3 = field3;
     }
 
+    /**
+     * get method for field3
+     * @return
+     */
     public String getField3(){
         return field3;
     }
