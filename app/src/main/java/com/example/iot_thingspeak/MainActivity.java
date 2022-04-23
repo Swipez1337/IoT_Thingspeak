@@ -31,6 +31,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,21 +54,21 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
-        this.getSupportActionBar().hide();
+        Objects.requireNonNull(this.getSupportActionBar()).hide();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
         getCurrentTemp(); //get current temp via api call
-        getCurrentFanspeed(); //get current fan speed via api call
+        getCurrentFanSpeed(); //get current fan speed via api call
 
     }
 
     /**
      * Initialize temperatures one time when opening app
      *
-     * @param view
+     * @param view is fragment 1 view
      */
     public void tempInit(View view) {
         if (initTemp) {
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Function to send API calls to ThingSpeak as well as call a view update of values
      *
-     * @param view
+     * @param view is fragment 1 view
      */
     @SuppressLint("SetTextI18n")
     public void updateData(View view) {
@@ -119,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Function to update view of the different values
      *
-     * @param view
+     * @param view is fragment 1 view
      */
     public void updateView(View view) {
 
@@ -131,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Method to set the fan speed to highest setting
      *
-     * @param view
+     * @param view is fragment 1 view
      */
     public void clickButton0(View view) {
         setFanSpeed(2); //2 is high setting
@@ -143,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Method to set the fan speed to medium
      *
-     * @param view
+     * @param view is fragment 1 view
      */
     public void clickButton2(View view) {
         setFanSpeed(1); //1 is medium setting
@@ -155,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Method to decrement the wanted temperature and update the view
      *
-     * @param view
+     * @param view is fragment 1 view
      */
     public void clickButton3(View view) {
         if (initTemp) {
@@ -172,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Method to increment the wanted temperature and update the view
      *
-     * @param view
+     * @param view is fragment 1 view
      */
     public void clickButton4(View view) {
 
@@ -190,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Method to turn off the fan
      *
-     * @param view
+     * @param view is fragment 1 view
      */
     public void clickButton5(View view) {
         setFanSpeed(0); //0 is low/off setting
@@ -245,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
      * A method to get the current fan speed via API call to ThingSpeak
      * This method has inspiration from https://www.geeksforgeeks.org/how-to-extract-data-from-json-array-in-android-using-volley-library/
      */
-    public void getCurrentFanspeed() {
+    public void getCurrentFanSpeed() {
         String url = "https://api.thingspeak.com/channels/1710056/fields/3.json?api_key=D5UZ9WBG9IXRLLTD&results=1";
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext()); //(MainActivity.this);
@@ -312,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("setWantedTemp_error", "An error has occured");
+                Log.d("setWantedTemp_error", "An error has occurred");
             }
         });
 
@@ -339,7 +341,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         //System.out.println("Response" + response.substring(0,500));
                         // Display the first 500 characters of the response string.
-                        Log.d("Wanted fanspeed: ", wantedFanSpeed + " . Response id: " + response + " .");
+                        Log.d("Wanted fan speed: ", wantedFanSpeed + " . Response id: " + response + " .");
 
                         if (response == null || response.equals("0")) { //if user is too quick and response is therefore 0
                             Log.d("Error", "User refreshed too soon");
@@ -349,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("setWantedFan_error", "An error has occured");
+                Log.d("setWantedFan_error", "An error has occurred");
             }
         });
 
@@ -390,7 +392,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Set method for field2
      *
-     * @param field2
+     * @param field2 a string for the read temperature
      */
     public void setField2(String field2) {
         this.field2 = field2;
@@ -399,7 +401,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Get method for field2
      *
-     * @return
+     * @return returns a string for the read temperature
      */
     public String getField2() {
         return field2;
@@ -408,8 +410,8 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Convert field2 from string to double to an int
      *
-     * @param field2
-     * @return
+     * @param field2 is the read temp in double type formatted as a string
+     * @return return current temp as a rounded integer
      */
     public int field2Convert(String field2) {
         //string to double
@@ -425,7 +427,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * set method for field3
      *
-     * @param field3
+     * @param field3 field3 as a string which is the fan speed
      */
     public void setField3(String field3) {
         this.field3 = field3;
@@ -434,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * get method for field3
      *
-     * @return
+     * @return field3 as a string which is the fan speed
      */
     public String getField3() {
         return field3;
