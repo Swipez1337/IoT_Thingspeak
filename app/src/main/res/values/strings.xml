@@ -26,7 +26,7 @@
     <string name="thingspeak_username">Username: nettomanden@hotmail.com</string>
     <string name="thingspeak_password">Password: 34315IoT</string>
     <string name="app_description">This is an app to control room temperature. It reads the current temperature and sets a wanted temperature which then is automatically pursued. Should you want to override the fan settings this is also possible via the app.</string>
-
+    <string name="toofast">You are too fast for our servers to handle. Please wait a few seconds and try again</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>

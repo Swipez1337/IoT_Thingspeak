@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if (response == null || response.equals("0")) { //if user is too quick and response is therefore 0
                             Log.d("Error", "User refreshed too soon");
-                            Toast.makeText(MainActivity.this, "You are too fast for our servers to handle. Please wait a few seconds and try again", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, getString(R.string.toofast), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -343,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if (response == null || response.equals("0")) { //if user is too quick and response is therefore 0
                             Log.d("Error", "User refreshed too soon");
-                            Toast.makeText(MainActivity.this, "You are too fast for our servers to handle. Please wait a few seconds and try again", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, getString(R.string.toofast), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new Response.ErrorListener() {
