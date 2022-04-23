@@ -212,32 +212,26 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext()); //(MainActivity.this);
 
         //get json array contents
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    //Select JSON array
-                    JSONArray responseObj = response.getJSONArray("feeds");
-                    //Select JSON object //field2JsonObject.toString())
-                    JSONObject field2JsonObject = responseObj.getJSONObject(0);
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
+            try {
+                //Select JSON array
+                JSONArray responseObj = response.getJSONArray("feeds");
+                //Select JSON object //field2JsonObject.toString())
+                JSONObject field2JsonObject = responseObj.getJSONObject(0);
 
-                    String field2local = field2JsonObject.get("field2").toString();
+                String field2local = field2JsonObject.get("field2").toString();
 
-                    Log.d("Field2 contents: ", field2local);
+                Log.d("Field2 contents: ", field2local);
 
-                    setField2(field2local);
-                    Log.d("this", getField2());
+                setField2(field2local);
+                Log.d("this", getField2());
 
-                } catch (JSONException e) {
-                    Log.d("GetCurrentTemp catch: ", response.toString());
-                }
+            } catch (JSONException e) {
+                Log.d("GetCurrentTemp catch: ", response.toString());
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, "Data unavailable. Please try again in 10 seconds", Toast.LENGTH_SHORT).show();
-                Log.d("GetCurrentTemp response", error.toString());
-            }
+        }, error -> {
+            Toast.makeText(MainActivity.this, "Data unavailable. Please try again in 10 seconds", Toast.LENGTH_SHORT).show();
+            Log.d("GetCurrentTemp response", error.toString());
         });
         queue.add(jsonArrayRequest);
     }
@@ -253,32 +247,26 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext()); //(MainActivity.this);
 
         //get json array contents
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    //Select JSON array
-                    JSONArray responseObj = response.getJSONArray("feeds");
-                    //Select JSON object //field2JsonObject.toString())
-                    JSONObject field3JsonObject = responseObj.getJSONObject(0);
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
+            try {
+                //Select JSON array
+                JSONArray responseObj = response.getJSONArray("feeds");
+                //Select JSON object //field2JsonObject.toString())
+                JSONObject field3JsonObject = responseObj.getJSONObject(0);
 
-                    String field3local = field3JsonObject.get("field3").toString();
+                String field3local = field3JsonObject.get("field3").toString();
 
-                    Log.d("Field3 contents: ", field3local);
+                Log.d("Field3 contents: ", field3local);
 
-                    setField3(field3local);
-                    Log.d("this", getField3());
+                setField3(field3local);
+                Log.d("this", getField3());
 
-                } catch (JSONException e) {
-                    Log.d("GetCurrentTemp catch: ", response.toString());
-                }
+            } catch (JSONException e) {
+                Log.d("GetCurrentTemp catch: ", response.toString());
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, "Data unavailable. Please try again in 10 seconds", Toast.LENGTH_SHORT).show();
-                Log.d("GetCurrentFan response", error.toString());
-            }
+        }, error -> {
+            Toast.makeText(MainActivity.this, "Data unavailable. Please try again in 10 seconds", Toast.LENGTH_SHORT).show();
+            Log.d("GetCurrentFan response", error.toString());
         });
         queue.add(jsonArrayRequest);
     }
@@ -299,24 +287,16 @@ public class MainActivity extends AppCompatActivity {
 // Request a string response from the provided API URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl,
 
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //System.out.println("Response" + response.substring(0,500));
-                        // Display the first 500 characters of the response string.
-                        Log.d("Wanted temperature: ", wantedTemp + " . Response id: " + response + " .");
+                response -> {
+                    //System.out.println("Response" + response.substring(0,500));
+                    // Display the first 500 characters of the response string.
+                    Log.d("Wanted temperature: ", wantedTemp + " . Response id: " + response + " .");
 
-                        if (response == null || response.equals("0")) { //if user is too quick and response is therefore 0
-                            Log.d("Error", "User refreshed too soon");
-                            Toast.makeText(MainActivity.this, getString(R.string.toofast), Toast.LENGTH_SHORT).show();
-                        }
+                    if (response == null || response.equals("0")) { //if user is too quick and response is therefore 0
+                        Log.d("Error", "User refreshed too soon");
+                        Toast.makeText(MainActivity.this, getString(R.string.toofast), Toast.LENGTH_SHORT).show();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("setWantedTemp_error", "An error has occurred");
-            }
-        });
+                }, error -> Log.d("setWantedTemp_error", "An error has occurred"));
 
 // Add the request to the RequestQueue.
         queue.add(stringRequest);
@@ -336,24 +316,16 @@ public class MainActivity extends AppCompatActivity {
 // Request a string response from the provided API URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl,
 
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //System.out.println("Response" + response.substring(0,500));
-                        // Display the first 500 characters of the response string.
-                        Log.d("Wanted fan speed: ", wantedFanSpeed + " . Response id: " + response + " .");
+                response -> {
+                    //System.out.println("Response" + response.substring(0,500));
+                    // Display the first 500 characters of the response string.
+                    Log.d("Wanted fan speed: ", wantedFanSpeed + " . Response id: " + response + " .");
 
-                        if (response == null || response.equals("0")) { //if user is too quick and response is therefore 0
-                            Log.d("Error", "User refreshed too soon");
-                            Toast.makeText(MainActivity.this, getString(R.string.toofast), Toast.LENGTH_SHORT).show();
-                        }
+                    if (response == null || response.equals("0")) { //if user is too quick and response is therefore 0
+                        Log.d("Error", "User refreshed too soon");
+                        Toast.makeText(MainActivity.this, getString(R.string.toofast), Toast.LENGTH_SHORT).show();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("setWantedFan_error", "An error has occurred");
-            }
-        });
+                }, error -> Log.d("setWantedFan_error", "An error has occurred"));
 
 // Add the request to the RequestQueue.
         queue.add(stringRequest);
