@@ -1,6 +1,8 @@
 package com.example.iot_thingspeak;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.iot_thingspeak.databinding.FragmentFirstBinding;
+
+import java.util.Locale;
 
 public class FirstFragment extends Fragment {
 
@@ -39,6 +43,13 @@ public class FirstFragment extends Fragment {
             }
         });
 
+
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        Log.d("this runs", "this runs");
 
     }
 

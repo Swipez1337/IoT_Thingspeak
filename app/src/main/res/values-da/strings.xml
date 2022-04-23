@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <string name="app_name">Group5 - IoT</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Indstillinger</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">Home temperature regulator</string>
+    <string name="first_fragment_label">Hjemme temperatur regulator</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="change">Change</string>
     <string name="previous">Previous</string>
     <string name="thingspeakAction_LEDon">On</string>
     <string name="thingspeakAction_LEDoff">Off</string>
-    <string name="thingspeak_temp">Wanted temperature</string>
+    <string name="thingspeak_temp">Ønsket temperatur</string>
     <string name="settings_desc">Settings section of the app</string>
-    <string name="fanStatus">Fan status</string>
-    <string name="fan_low">Off</string>
-    <string name="fan_med">Medium</string>
-    <string name="fan_high">High</string>
-    <string name="ledStatus">Current temperature</string>
-    <string name="Reload">Update data</string>
-    <string name="Thingspeak_account">ThingSpeak account settings</string>
-    <string name="Account_preferences">Description</string>
+    <string name="fanStatus">Blæser status</string>
+    <string name="fan_low">Fra</string>
+    <string name="fan_med">Mellem</string>
+    <string name="fan_high">Maks</string>
+    <string name="ledStatus">Ønsket temperatur</string>
+    <string name="Reload">Opdater data</string>
+    <string name="Thingspeak_account">ThingSpeak konto indstillinger</string>
+    <string name="Account_preferences">Beskrivelse</string>
     <string name="increment">+</string>
     <string name="decrement">-</string>
-    <string name="changelanguage_en">Danish language</string>
+    <string name="changelanguage_en">Engelsk sprog</string>
 
 
     <string name="hello_first_fragment">Hello first fragment</string>

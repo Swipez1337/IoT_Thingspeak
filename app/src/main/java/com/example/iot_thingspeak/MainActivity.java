@@ -1,6 +1,8 @@
 package com.example.iot_thingspeak;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +23,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.iot_thingspeak.databinding.ActivityMainBinding;
+import com.google.android.material.navigation.NavigationView;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +33,8 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -164,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
      * @param view
      */
     public void clickButton3(View view) {
-
         if (initTemp) {
             updateData(view);
             initTemp = false;
@@ -444,4 +448,5 @@ public class MainActivity extends AppCompatActivity {
     public String getField3(){
         return field3;
     }
+
 }
