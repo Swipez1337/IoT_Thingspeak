@@ -15,8 +15,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
+//import com.android.volley.Response;
+//import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -295,8 +295,6 @@ public class MainActivity extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl,
 
                 response -> {
-                    //System.out.println("Response" + response.substring(0,500));
-                    // Display the first 500 characters of the response string.
                     Log.d("Wanted temperature: ", wantedTemp + " . Response id: " + response + " .");
 
                     if (response == null || response.equals("0")) { //if user is too quick and response is therefore 0
@@ -324,8 +322,6 @@ public class MainActivity extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl,
 
                 response -> {
-                    //System.out.println("Response" + response.substring(0,500));
-                    // Display the first 500 characters of the response string.
                     Log.d("Wanted fan speed: ", wantedFanSpeed + " . Response id: " + response + " .");
 
                     if (response == null || response.equals("0")) { //if user is too quick and response is therefore 0
