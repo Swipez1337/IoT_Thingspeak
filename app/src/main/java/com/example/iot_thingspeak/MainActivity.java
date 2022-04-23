@@ -119,6 +119,9 @@ public class MainActivity extends AppCompatActivity {
             setWantedTemp(wantedTemp); // set wanted temp via api call
         }
 
+        //update view of wanted temperature
+        ((TextView) findViewById(R.id.textview6)).setText(Integer.toString(wantedTemp));
+
     }
 
     /**
