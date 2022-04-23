@@ -100,9 +100,16 @@ public class MainActivity extends AppCompatActivity {
                 readTemp1 = field2Convert(getField2());
             }
 
-            //update fan setting //BE AWARE THE BELOW LINE CURRENTLY CAN CRASH THE CODE IF IT IS NULL
-            ((TextView) findViewById(R.id.textview2)).setText(getField3());
-
+            //update fan setting //BE AWARE THE BELOW LINE CAN CURRENTLY CRASH THE CODE IF IT IS NULL
+            if (Objects.equals(getField3(), "0")) { //show corresponding text based on fan value
+                ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_low));
+            } else if (Objects.equals(getField3(), "1")) {
+                ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_med));
+            } else if (Objects.equals(getField3(), "2")) {
+                ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_high));
+            } else { //should not occur
+                ((TextView) findViewById(R.id.textview2)).setText(getField3());
+            }
 
             tempCounter = 0; //reset temporary counter
 
