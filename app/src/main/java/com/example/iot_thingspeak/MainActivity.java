@@ -38,11 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     // Declaring public variables
-    int readTemp1;
-    int wantedTemp1;
-    int wantedFanSpeed;
-    int tempCounter = 0;
-    boolean ledStatus, fanStatus, initTemp = true, testStatus = false;
+    int readTemp1, wantedTemp1, tempCounter = 0;
+    boolean initTemp = true;
     String field2, field3;
 
 
@@ -77,8 +74,7 @@ public class MainActivity extends AppCompatActivity {
             initTemp = false;
 
             //update view of wanted temp
-            TextView textView = (TextView) findViewById(R.id.textview6);
-            textView.setText(String.valueOf(wantedTemp1));
+            ((TextView) findViewById(R.id.textview6)).setText(String.valueOf(wantedTemp1));
         }
     }
 
@@ -95,17 +91,15 @@ public class MainActivity extends AppCompatActivity {
         tempCounter++;
 
         if (tempCounter > 1) { //CURRENT ISSUE: It only updates the first time after it has been pressed twice. This counter is therefore to be removed at a later time.
-            TextView textView = (TextView) findViewById(R.id.textview5); //view current rounded temp
 
             //BE AWARE THE BELOW 2 LINES CURRENTLY CRASHES THE CODE IF IT IS NULL
             if (getField2() != "null") {
-                textView.setText(Integer.toString(field2Convert(getField2())));
+                ((TextView) findViewById(R.id.textview5)).setText(Integer.toString(field2Convert(getField2())));  //view current rounded temp
                 readTemp1 = field2Convert(getField2());
             }
 
-            //update fan setting //BE AWARE THE BELOW 2 LINES CURRENTLY CAN CRASH THE CODE IF IT IS NULL
-            TextView textViewfan = (TextView) findViewById(R.id.textview2); //view current fan speed
-            textViewfan.setText(getField3());
+            //update fan setting //BE AWARE THE BELOW LINE CURRENTLY CAN CRASH THE CODE IF IT IS NULL
+            ((TextView) findViewById(R.id.textview2)).setText(getField3());
 
 
             tempCounter = 0; //reset temporary counter
@@ -130,8 +124,7 @@ public class MainActivity extends AppCompatActivity {
     public void updateView(View view) {
 
         //current temp val
-        TextView textView = (TextView) findViewById(R.id.textview5);
-        textView.setText(getField2());
+        ((TextView) findViewById(R.id.textview5)).setText(getField2());
 
     }
 
@@ -143,11 +136,7 @@ public class MainActivity extends AppCompatActivity {
     public void clickButton0(View view) {
         setFanSpeed(2); //2 is high setting
 
-        TextView textView = (TextView) findViewById(R.id.textview2); //update view
-        textView.setText("High");
-
-        //Log.d("a", Integer.toString(field2Convert("21.95032")));
-        //Log.d("a", Integer.toString(field2Convert(getField2())));
+        ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_high));
     }
 
 
@@ -159,8 +148,7 @@ public class MainActivity extends AppCompatActivity {
     public void clickButton2(View view) {
         setFanSpeed(1); //1 is medium setting
 
-        TextView textView = (TextView) findViewById(R.id.textview2); //update view
-        textView.setText("Medium");
+        ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_med));
 
     }
 
@@ -176,9 +164,8 @@ public class MainActivity extends AppCompatActivity {
         } //in case values have not been read yet
 
         wantedTemp1--;
-        TextView textView = (TextView) findViewById(R.id.textview6);
-        textView.setText(String.valueOf(wantedTemp1));
 
+        ((TextView) findViewById(R.id.textview6)).setText(String.valueOf(wantedTemp1));
     }
 
 
@@ -196,9 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
         wantedTemp1++;
 
-        TextView textView = (TextView) findViewById(R.id.textview6);
-        textView.setText(String.valueOf(wantedTemp1));
-
+        ((TextView) findViewById(R.id.textview6)).setText(String.valueOf(wantedTemp1));
     }
 
 
@@ -210,8 +195,7 @@ public class MainActivity extends AppCompatActivity {
     public void clickButton5(View view) {
         setFanSpeed(0); //0 is low/off setting
 
-        TextView textView = (TextView) findViewById(R.id.textview2); //update view
-        textView.setText("Off");
+        ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_low));
 
     }
 
