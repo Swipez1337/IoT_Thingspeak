@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         if (tempCounter > 1) { //CURRENT ISSUE: It only updates the first time after it has been pressed twice. This counter is therefore to be removed at a later time.
 
             //BE AWARE THE BELOW 2 LINES CURRENTLY CRASHES THE CODE IF IT IS NULL
-            if (getField2() != "null") {
+            if (!Objects.equals(getField2(), "null")) {
                 ((TextView) findViewById(R.id.textview5)).setText(Integer.toString(field2Convert(getField2())));  //view current rounded temp
                 readTemp1 = field2Convert(getField2());
             }
