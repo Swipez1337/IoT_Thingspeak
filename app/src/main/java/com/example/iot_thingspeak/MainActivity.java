@@ -60,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
+        getCurrentTemp(); //get current temp via api call
+        getCurrentFanspeed(); //get current fan speed via api call
+
     }
 
     /**
@@ -84,21 +87,23 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     public void updateData(View view) {
 
-        getCurrentTemp(); //get current temp via api call
-        getCurrentFanspeed(); //get current fan speed via api call
         updateView(view); //update views testing
+
         tempCounter ++;
 
         if (tempCounter > 1) { //CURRENT ISSUE: It only updates the first time after it has been pressed twice. This counter is therefore to be removed at a later time.
             TextView textView = (TextView) findViewById(R.id.textview5); //view current rounded temp
 
             //BE AWARE THE BELOW 2 LINES CURRENTLY CRASHES THE CODE IF IT IS NULL
-            textView.setText(Integer.toString(field2Convert(getField2())));
-            readTemp1 = field2Convert(getField2());
+            if(getField2() != "null"){
+                textView.setText(Integer.toString(field2Convert(getField2())));
+                readTemp1 = field2Convert(getField2());
+            }
 
             //update fan setting //BE AWARE THE BELOW 2 LINES CURRENTLY CAN CRASH THE CODE IF IT IS NULL
-            TextView textViewfan = (TextView) findViewById(R.id.textview2); //view current fan speed
-            textViewfan.setText(getField3());
+            TextView textViewfan = (TextView) findViewById( R.id.textview2 ); //view current fan speed
+            textViewfan.setText( getField3() );
+
 
             tempCounter = 0; //reset temporary counter
 
