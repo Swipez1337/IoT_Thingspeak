@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     // Declaring public variables
-    int readTemp1, wantedTemp1, tempCounter = 0;
+    int readTemp1, wantedTemp1;
     boolean initTemp = true;
     String field2, field3;
 
@@ -90,10 +90,6 @@ public class MainActivity extends AppCompatActivity {
 
         updateView(view); //update views testing
 
-        tempCounter++;
-
-        if (tempCounter > 1) { //CURRENT ISSUE: It only updates the first time after it has been pressed twice. This counter is therefore to be removed at a later time.
-
             //BE AWARE THE BELOW 2 LINES CURRENTLY CRASHES THE CODE IF IT IS NULL
             if (!Objects.equals(getField2(), "null")) {
                 ((TextView) findViewById(R.id.textview5)).setText(Integer.toString(field2Convert(getField2())));  //view current rounded temp
@@ -111,8 +107,6 @@ public class MainActivity extends AppCompatActivity {
                 ((TextView) findViewById(R.id.textview2)).setText(getField3());
             }
 
-            tempCounter = 0; //reset temporary counter
-
             //Initialize temperature variables etc.
             if (initTemp) {
                 tempInit(view);
@@ -121,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
                     setWantedTemp(wantedTemp1); // set wanted temp via api call
                 }
             }
-        }
     }
 
 
