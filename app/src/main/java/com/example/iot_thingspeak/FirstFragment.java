@@ -47,7 +47,7 @@ public class FirstFragment extends Fragment {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         Log.d("this runs", "this runs");
 

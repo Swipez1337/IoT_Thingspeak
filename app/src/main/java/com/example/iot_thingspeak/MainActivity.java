@@ -1,8 +1,6 @@
 package com.example.iot_thingspeak;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +21,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.iot_thingspeak.databinding.ActivityMainBinding;
-import com.google.android.material.navigation.NavigationView;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,7 +31,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,11 +68,12 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Initialize temperatures one time when opening app
+     *
      * @param view
      */
     public void tempInit(View view) {
         if (initTemp) {
-            wantedTemp1 = readTemp1 ;
+            wantedTemp1 = readTemp1;
             initTemp = false;
 
             //update view of wanted temp
@@ -87,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Function to send API calls to ThingSpeak as well as call a view update of values
+     *
      * @param view
      */
     @SuppressLint("SetTextI18n")
@@ -94,20 +92,20 @@ public class MainActivity extends AppCompatActivity {
 
         updateView(view); //update views testing
 
-        tempCounter ++;
+        tempCounter++;
 
         if (tempCounter > 1) { //CURRENT ISSUE: It only updates the first time after it has been pressed twice. This counter is therefore to be removed at a later time.
             TextView textView = (TextView) findViewById(R.id.textview5); //view current rounded temp
 
             //BE AWARE THE BELOW 2 LINES CURRENTLY CRASHES THE CODE IF IT IS NULL
-            if(getField2() != "null"){
+            if (getField2() != "null") {
                 textView.setText(Integer.toString(field2Convert(getField2())));
                 readTemp1 = field2Convert(getField2());
             }
 
             //update fan setting //BE AWARE THE BELOW 2 LINES CURRENTLY CAN CRASH THE CODE IF IT IS NULL
-            TextView textViewfan = (TextView) findViewById( R.id.textview2 ); //view current fan speed
-            textViewfan.setText( getField3() );
+            TextView textViewfan = (TextView) findViewById(R.id.textview2); //view current fan speed
+            textViewfan.setText(getField3());
 
 
             tempCounter = 0; //reset temporary counter
@@ -115,8 +113,7 @@ public class MainActivity extends AppCompatActivity {
             //Initialize temperature variables etc.
             if (initTemp) {
                 tempInit(view);
-            }
-            else {
+            } else {
                 if (wantedTemp1 != readTemp1) {
                     setWantedTemp(wantedTemp1); // set wanted temp via api call
                 }
@@ -127,9 +124,10 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Function to update view of the different values
+     *
      * @param view
      */
-    public void updateView(View view){
+    public void updateView(View view) {
 
         //current temp val
         TextView textView = (TextView) findViewById(R.id.textview5);
@@ -139,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Method to set the fan speed to highest setting
+     *
      * @param view
      */
     public void clickButton0(View view) {
@@ -154,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Method to set the fan speed to medium
+     *
      * @param view
      */
     public void clickButton2(View view) {
@@ -166,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Method to decrement the wanted temperature and update the view
+     *
      * @param view
      */
     public void clickButton3(View view) {
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
             initTemp = false;
         } //in case values have not been read yet
 
-        wantedTemp1 --;
+        wantedTemp1--;
         TextView textView = (TextView) findViewById(R.id.textview6);
         textView.setText(String.valueOf(wantedTemp1));
 
@@ -183,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Method to increment the wanted temperature and update the view
+     *
      * @param view
      */
     public void clickButton4(View view) {
@@ -202,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Method to turn off the fan
+     *
      * @param view
      */
     public void clickButton5(View view) {
@@ -211,7 +214,6 @@ public class MainActivity extends AppCompatActivity {
         textView.setText("Off");
 
     }
-
 
 
     /**
@@ -298,15 +300,15 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * A method to set the wanted temperature via. API call to ThingSpeak
-     * @param wantedTemp
-     * This method has inspiration from https://google.github.io/volley/simple.html
+     *
+     * @param wantedTemp This method has inspiration from https://google.github.io/volley/simple.html
      */
     //Inspiration for API write: https://google.github.io/volley/simple.html
-    public void setWantedTemp(int wantedTemp){
+    public void setWantedTemp(int wantedTemp) {
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String apiUrl = "https://api.thingspeak.com/update?api_key=SOR94XAST8J94V4W&field1=" + wantedTemp ;
+        String apiUrl = "https://api.thingspeak.com/update?api_key=SOR94XAST8J94V4W&field1=" + wantedTemp;
 
 // Request a string response from the provided API URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl,
@@ -336,14 +338,14 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Method for API call to set the fan speed 0,1,2 to ThingSpeak
-     * @param wantedFanSpeed
-     * This method has inspiration from https://google.github.io/volley/simple.html
+     *
+     * @param wantedFanSpeed This method has inspiration from https://google.github.io/volley/simple.html
      */
-    public void setFanSpeed(int wantedFanSpeed){
+    public void setFanSpeed(int wantedFanSpeed) {
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String apiUrl = "https://api.thingspeak.com/update?api_key=SOR94XAST8J94V4W&field3=" + wantedFanSpeed ;
+        String apiUrl = "https://api.thingspeak.com/update?api_key=SOR94XAST8J94V4W&field3=" + wantedFanSpeed;
 
 // Request a string response from the provided API URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl,
@@ -403,26 +405,29 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Set method for field2
+     *
      * @param field2
      */
-    public void setField2(String field2){
+    public void setField2(String field2) {
         this.field2 = field2;
     }
 
     /**
      * Get method for field2
+     *
      * @return
      */
-    public String getField2(){
+    public String getField2() {
         return field2;
     }
 
     /**
      * Convert field2 from string to double to an int
+     *
      * @param field2
      * @return
      */
-    public int field2Convert(String field2){
+    public int field2Convert(String field2) {
         //string to double
         double d = Double.parseDouble(field2);
 
@@ -435,17 +440,19 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * set method for field3
+     *
      * @param field3
      */
-    public void setField3(String field3){
+    public void setField3(String field3) {
         this.field3 = field3;
     }
 
     /**
      * get method for field3
+     *
      * @return
      */
-    public String getField3(){
+    public String getField3() {
         return field3;
     }
 
