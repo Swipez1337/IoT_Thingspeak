@@ -16,7 +16,7 @@
     <string name="fan_low">Fra</string>
     <string name="fan_med">Mellem</string>
     <string name="fan_high">Maks</string>
-    <string name="ledStatus">Ønsket temperatur</string>
+    <string name="ledStatus">Nuværende temperatur</string>
     <string name="Reload">Opdater data</string>
     <string name="Thingspeak_account">ThingSpeak konto indstillinger</string>
     <string name="Account_preferences">App beskrivelse</string>
@@ -24,7 +24,7 @@
     <string name="decrement">-</string>
     <string name="changelanguage_en">Engelsk sprog</string>
     <string name="thingspeak_username">Brugernavn: nettomanden@hotmail.com</string>
-    <string name="thingspeak_password">Adgangskode: 34315IoT</string>
+    <string name="thingspeak_password">Adgangskode: Findes i rapporten</string>
     <string name="app_description">Dette er en app til at kontrollere rum temperatur. Den læser den nuværende temperature og sætter en ønsket temperatur som automatisk forfølges. Det er endvidere muligt at kontrollere blæser indstillingerne direkte i appen</string>
     <string name="toofast">Du er hurtigere end vores servere. Vent venligst nogle sekunder og prøv igen</string>
 
