@@ -15,8 +15,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-//import com.android.volley.Response;
-//import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -33,16 +31,18 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
-
+/**
+ * MainActivity class. Has been built upon an Android Studio (IDE) template
+ */
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
     // Declaring public variables
-    int readTemp1, wantedTemp1;
-    boolean initTemp = true;
-    String field2, field3;
+    int readTemp, wantedTemp; //int variables for the current temperature and wanted temperature
+    boolean initTemp = true; //boolean to initialize temp values when first opening app
+    String field2, field3; //strings to contain results from API calls
 
 
     @Override
@@ -72,61 +72,52 @@ public class MainActivity extends AppCompatActivity {
      */
     public void tempInit(View view) {
         if (initTemp) {
-            wantedTemp1 = readTemp1;
+            wantedTemp = readTemp;
             initTemp = false;
 
-            //update view of wanted temp
-            ((TextView) findViewById(R.id.textview6)).setText(String.valueOf(wantedTemp1));
+            //update view of wanted temp to set its default value to be equal read temp
+            ((TextView) findViewById(R.id.textview6)).setText(String.valueOf(wantedTemp));
         }
     }
 
     /**
-     * Function to send API calls to ThingSpeak as well as call a view update of values
+     * Method to send API calls to ThingSpeak as well as call a view update of values
      *
      * @param view is fragment 1 view
      */
     @SuppressLint("SetTextI18n")
     public void updateData(View view) {
 
-        updateView(view); //update views testing
+        //Update view of current temp
+        if (!Objects.equals(getField2(), "null")) { // rounded temp if not null
+            ((TextView) findViewById(R.id.textview5)).setText(Integer.toString(field2Convert(getField2())));  //view current rounded temp
+            readTemp = field2Convert(getField2());
+        } else { // if null
+            ((TextView) findViewById(R.id.textview5)).setText("0"); //show 0 if value cannot be read/is null
+            //((TextView) findViewById(R.id.textview5)).setText(getField2()); //current temp val, shows actual value, even if "null"
+        }
 
-            //BE AWARE THE BELOW 2 LINES CURRENTLY CRASHES THE CODE IF IT IS NULL
-            if (!Objects.equals(getField2(), "null")) {
-                ((TextView) findViewById(R.id.textview5)).setText(Integer.toString(field2Convert(getField2())));  //view current rounded temp
-                readTemp1 = field2Convert(getField2());
-            }
+        //update fan setting
+        if (Objects.equals(getField3(), "0")) { //show corresponding text based on fan value
+            ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_low));
+        } else if (Objects.equals(getField3(), "1")) {
+            ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_med));
+        } else if (Objects.equals(getField3(), "2")) {
+            ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_high));
+        } else { //should not occur
+            ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_low)); //show "off" if value cannot be read/is null
+            //((TextView) findViewById(R.id.textview2)).setText(getField3()); //current fan speed shows actual value, even if "null"
+        }
 
-            //update fan setting //BE AWARE THE BELOW LINE CAN CURRENTLY CRASH THE CODE IF IT IS NULL
-            if (Objects.equals(getField3(), "0")) { //show corresponding text based on fan value
-                ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_low));
-            } else if (Objects.equals(getField3(), "1")) {
-                ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_med));
-            } else if (Objects.equals(getField3(), "2")) {
-                ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_high));
-            } else { //should not occur
-                ((TextView) findViewById(R.id.textview2)).setText(getField3());
-            }
+        //Initialize temperature variables etc.
+        if (initTemp) {
+            tempInit(view);
+        }
 
-            //Initialize temperature variables etc.
-            if (initTemp) {
-                tempInit(view);
-            } else {
-                if (wantedTemp1 != readTemp1) {
-                    setWantedTemp(wantedTemp1); // set wanted temp via api call
-                }
-            }
-    }
-
-
-    /**
-     * Function to update view of the different values
-     *
-     * @param view is fragment 1 view
-     */
-    public void updateView(View view) {
-
-        //current temp val
-        ((TextView) findViewById(R.id.textview5)).setText(getField2());
+        //if increments/decrements have been made, use api
+        if (wantedTemp != readTemp) {
+            setWantedTemp(wantedTemp); // set wanted temp via api call
+        }
 
     }
 
@@ -138,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
     public void clickButton0(View view) {
         setFanSpeed(2); //2 is high setting
 
-        ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_high));
+        ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_high)); //update view
     }
 
 
@@ -150,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     public void clickButton2(View view) {
         setFanSpeed(1); //1 is medium setting
 
-        ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_med));
+        ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_med)); //update view
 
     }
 
@@ -160,14 +151,14 @@ public class MainActivity extends AppCompatActivity {
      * @param view is fragment 1 view
      */
     public void clickButton3(View view) {
-        if (initTemp) {
+        if (initTemp) { //in case values have not been read yet
             updateData(view);
             initTemp = false;
-        } //in case values have not been read yet
+        }
 
-        wantedTemp1--;
+        wantedTemp--;
 
-        ((TextView) findViewById(R.id.textview6)).setText(String.valueOf(wantedTemp1));
+        ((TextView) findViewById(R.id.textview6)).setText(String.valueOf(wantedTemp)); //update view
     }
 
 
@@ -178,14 +169,14 @@ public class MainActivity extends AppCompatActivity {
      */
     public void clickButton4(View view) {
 
-        if (initTemp) {
+        if (initTemp) { //in case values have not been read yet
             updateData(view);
             initTemp = false;
-        } //in case values have not been read yet
+        }
 
-        wantedTemp1++;
+        wantedTemp++;
 
-        ((TextView) findViewById(R.id.textview6)).setText(String.valueOf(wantedTemp1));
+        ((TextView) findViewById(R.id.textview6)).setText(String.valueOf(wantedTemp)); //update view
     }
 
 
@@ -197,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
     public void clickButton5(View view) {
         setFanSpeed(0); //0 is low/off setting
 
-        ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_low));
+        ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_low)); //update view
 
     }
 
@@ -211,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext()); //(MainActivity.this);
 
-        //get json array contents
+        //get json array contents via api request
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
             try {
                 //Select JSON array
@@ -224,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Field2 contents: ", field2local);
 
                 setField2(field2local);
-                Log.d("this", getField2());
+                Log.d("Field2 getter contents:", getField2());
 
             } catch (JSONException e) {
                 Log.d("GetCurrentTemp catch: ", response.toString());
@@ -233,6 +224,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Data unavailable. Please try again in 10 seconds", Toast.LENGTH_SHORT).show();
             Log.d("GetCurrentTemp response", error.toString());
         });
+
+        // put request in request queue
         queue.add(jsonArrayRequest);
     }
 
@@ -246,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext()); //(MainActivity.this);
 
-        //get json array contents
+        //get json array contents via api request
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
             try {
                 //Select JSON array
@@ -259,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Field3 contents: ", field3local);
 
                 setField3(field3local);
-                Log.d("this", getField3());
+                Log.d("Field3 getter contents:", getField3());
 
             } catch (JSONException e) {
                 Log.d("GetCurrentTemp catch: ", response.toString());
@@ -268,6 +261,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Data unavailable. Please try again in 10 seconds", Toast.LENGTH_SHORT).show();
             Log.d("GetCurrentFan response", error.toString());
         });
+
+        // put request in request queue
         queue.add(jsonArrayRequest);
     }
 
@@ -277,14 +272,12 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param wantedTemp This method has inspiration from https://google.github.io/volley/simple.html
      */
-    //Inspiration for API write: https://google.github.io/volley/simple.html
     public void setWantedTemp(int wantedTemp) {
 
-        // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
         String apiUrl = "https://api.thingspeak.com/update?api_key=SOR94XAST8J94V4W&field1=" + wantedTemp;
 
-// Request a string response from the provided API URL.
+        // Send a string request from above api url
         StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl,
 
                 response -> {
@@ -296,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }, error -> Log.d("setWantedTemp_error", "An error has occurred"));
 
-// Add the request to the RequestQueue.
+        // put request in request queue
         queue.add(stringRequest);
     }
 
@@ -307,11 +300,10 @@ public class MainActivity extends AppCompatActivity {
      */
     public void setFanSpeed(int wantedFanSpeed) {
 
-        // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
         String apiUrl = "https://api.thingspeak.com/update?api_key=SOR94XAST8J94V4W&field3=" + wantedFanSpeed;
 
-// Request a string response from the provided API URL.
+        // Send a string request from above api url
         StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl,
 
                 response -> {
@@ -323,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }, error -> Log.d("setWantedFan_error", "An error has occurred"));
 
-// Add the request to the RequestQueue.
+        // put request in request queue
         queue.add(stringRequest);
     }
 
@@ -337,12 +329,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // Handle action bar item clicks here.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -385,7 +374,7 @@ public class MainActivity extends AppCompatActivity {
         //string to double
         double d = Double.parseDouble(field2);
 
-        //round double to int
+        //round double to nearest int
         int currTemp = (int) Math.round(d);
 
         Log.d("a", Integer.toString(currTemp));

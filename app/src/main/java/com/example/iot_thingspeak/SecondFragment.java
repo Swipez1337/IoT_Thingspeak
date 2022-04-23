@@ -15,6 +15,9 @@ import com.example.iot_thingspeak.databinding.FragmentSecondBinding;
 
 import java.util.Locale;
 
+/**
+ * SecondFragment class. Has been built upon an Android Studio (IDE) template
+ */
 public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
@@ -33,17 +36,21 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //OnClick language button
         binding.buttonSecond.setOnClickListener(view1 -> {
 
-            languageSwitch();
+            languageSwitch(); //method to switch language
 
             NavHostFragment.findNavController(SecondFragment.this)
-                    .navigate(R.id.action_SecondFragment_to_FirstFragment);
+                    .navigate(R.id.action_SecondFragment_to_FirstFragment); //navigate to first fragment
 
         });
 
+        /*
         binding.buttonSecond2.setOnClickListener(view12 -> NavHostFragment.findNavController(SecondFragment.this)
                 .navigate(R.id.action_SecondFragment_to_FirstFragment));
+         */
+
     }
 
     @Override

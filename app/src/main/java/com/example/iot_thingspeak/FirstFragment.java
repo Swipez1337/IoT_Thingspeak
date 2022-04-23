@@ -13,6 +13,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.iot_thingspeak.databinding.FragmentFirstBinding;
 
 
+/**
+ * FirstFragment class. Has been built upon an Android Studio (IDE) template
+ */
 public class FirstFragment extends Fragment {
 
     private FragmentFirstBinding binding;
@@ -31,7 +34,7 @@ public class FirstFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        //OnClick settings icon. Navigate to second fragment
         binding.imageView1.setOnClickListener(view1 -> NavHostFragment.findNavController(FirstFragment.this)
                 .navigate(R.id.action_FirstFragment_to_SecondFragment));
 
@@ -41,7 +44,7 @@ public class FirstFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("this runs", "this runs");
+        Log.d("FirstFragment log: ", "onResume has run successfully");
 
     }
 
