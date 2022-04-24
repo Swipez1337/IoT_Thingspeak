@@ -105,11 +105,15 @@ public class MainActivity extends AppCompatActivity {
         } else if (Objects.equals(getField3(), "2")) {
             ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_high));
         } else { //if null
-            if (((TextView) findViewById(R.id.textview2)).getText() != getString(R.string.fan_low)) { //if the view has been changed from the null value, do not update the view back to null value
+            ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_low)); //show "off" if value cannot be read/is null
+            //((TextView) findViewById(R.id.textview2)).setText(getField3()); //current fan speed shows actual value, even if "null"
+
+            /*if (((TextView) findViewById(R.id.textview2)).getText() != getString(R.string.fan_low)) { //if the view has been changed from the null value, do not update the view back to null value
             } else { // if view has not been updated otherwise
                 ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_low)); //show "off" if value cannot be read/is null
                 //((TextView) findViewById(R.id.textview2)).setText(getField3()); //current fan speed shows actual value, even if "null"
             }
+             */
         }
 
         //Initialize temperature variables etc.
