@@ -88,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     public void updateData(View view) {
 
+        //Set fan speed to auto
+        //setFanSpeed(3);
+
         //Update view of current temp
         if (!Objects.equals(getField2(), "null")) { // rounded temp if not null
             ((TextView) findViewById(R.id.textview5)).setText(Integer.toString(field2Convert(getField2())));  //view current rounded temp
@@ -144,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * Method to set the fan speed to medium
+     * Method to set the fan speed to low
      *
      * @param view is fragment 1 view
      */
@@ -202,6 +205,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Method to turn the fan to auto mode
+     *
+     * @param view is fragment 1 view
+     */
+    public void clickButton6(View view) {
+        setFanSpeed(3); //0 is low/off setting
+
+        ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_auto)); //update view
+
+    }
 
     /**
      * A method to get the current temperature via an API call to ThingSpeak

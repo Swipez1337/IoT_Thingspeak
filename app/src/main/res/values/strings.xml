@@ -13,8 +13,9 @@
     <string name="thingspeak_temp">Wanted temperature</string>
     <string name="settings_desc">Settings section of the app</string>
     <string name="fanStatus">Fan status</string>
+    <string name="fan_auto">Auto</string>
     <string name="fan_low">Off</string>
-    <string name="fan_med">Medium</string>
+    <string name="fan_med">Low</string>
     <string name="fan_high">High</string>
     <string name="ledStatus">Current temperature</string>
     <string name="Reload">Update data</string>
