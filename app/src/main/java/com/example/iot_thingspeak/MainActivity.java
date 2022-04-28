@@ -206,12 +206,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Method to turn the fan to auto mode
+     * Method to set the fan to auto mode
      *
      * @param view is fragment 1 view
      */
     public void clickButton6(View view) {
-        setFanSpeed(3); //0 is low/off setting
+        setFanSpeed(3); //3 is fan auto setting
 
         ((TextView) findViewById(R.id.textview2)).setText(getString(R.string.fan_auto)); //update view
 
