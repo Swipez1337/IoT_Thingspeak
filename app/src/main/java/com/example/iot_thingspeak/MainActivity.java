@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
      * Initialize temperatures one time when opening app
      *
      * @param view is fragment 1 view
+     * @author Frederik Lundsbjerg, s205472
      */
     public void tempInit(View view) {
         if (initTemp) {
@@ -84,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
      * Method to send API calls to ThingSpeak as well as call a view update of values
      *
      * @param view is fragment 1 view
+     * @author Frederik Lundsbjerg, s205472
+     * @author Thomas Hohnen, s195455
      */
     @SuppressLint("SetTextI18n")
     public void updateData(View view) {
@@ -138,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
      * Method to set the fan speed to highest setting
      *
      * @param view is fragment 1 view
+     * @author Frederik Lundsbjerg, s205472
      */
     public void clickButton0(View view) {
         setFanSpeed(2); //2 is high setting
@@ -150,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
      * Method to set the fan speed to low
      *
      * @param view is fragment 1 view
+     * @author Frederik Lundsbjerg, s205472
      */
     public void clickButton2(View view) {
         setFanSpeed(1); //1 is medium setting
@@ -162,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
      * Method to decrement the wanted temperature and update the view
      *
      * @param view is fragment 1 view
+     * @author Frederik Lundsbjerg, s205472
      */
     public void clickButton3(View view) {
         if (initTemp) { //in case values have not been read yet
@@ -179,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
      * Method to increment the wanted temperature and update the view
      *
      * @param view is fragment 1 view
+     * @author Frederik Lundsbjerg, s205472
      */
     public void clickButton4(View view) {
 
@@ -197,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
      * Method to turn off the fan
      *
      * @param view is fragment 1 view
+     * @author Frederik Lundsbjerg, s205472
      */
     public void clickButton5(View view) {
         setFanSpeed(0); //0 is low/off setting
@@ -209,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
      * Method to set the fan to auto mode
      *
      * @param view is fragment 1 view
+     * @author Frederik Lundsbjerg, s205472
      */
     public void clickButton6(View view) {
         setFanSpeed(3); //3 is fan auto setting
@@ -220,6 +229,8 @@ public class MainActivity extends AppCompatActivity {
     /**
      * A method to get the current temperature via an API call to ThingSpeak
      * This method has inspiration from https://www.geeksforgeeks.org/how-to-extract-data-from-json-array-in-android-using-volley-library/
+     * @author Frederik Lundsbjerg, s205472
+     * @author Thomas Hohnen, s195455
      */
     public void getCurrentTemp(/* View view*/) {
         String url = "https://api.thingspeak.com/channels/1710056/fields/2.json?api_key=D5UZ9WBG9IXRLLTD&results=1";
@@ -257,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * A method to get the current fan speed via API call to ThingSpeak
      * This method has inspiration from https://www.geeksforgeeks.org/how-to-extract-data-from-json-array-in-android-using-volley-library/
+     * @author Frederik Lundsbjerg, s205472
      */
     public void getCurrentFanSpeed() {
         String url = "https://api.thingspeak.com/channels/1710056/fields/3.json?api_key=D5UZ9WBG9IXRLLTD&results=1";
@@ -293,8 +305,10 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * A method to set the wanted temperature via. API call to ThingSpeak
-     *
-     * @param wantedTemp This method has inspiration from https://google.github.io/volley/simple.html
+     * This method has inspiration from https://google.github.io/volley/simple.html
+     * @param wantedTemp is an integer for the wanted temperature
+     * @author Frederik Lundsbjerg, s205472
+     * @author Thomas Hohnen, s195455
      */
     public void setWantedTemp(int wantedTemp) {
 
@@ -319,8 +333,9 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Method for API call to set the fan speed 0,1,2 to ThingSpeak
-     *
-     * @param wantedFanSpeed This method has inspiration from https://google.github.io/volley/simple.html
+     * This method has inspiration from https://google.github.io/volley/simple.html
+     * @param wantedFanSpeed is an integer for the status of the wanted Fan speed: 0 off, 1 low, 2 high, 3 auto
+     * @author Frederik Lundsbjerg, s205472
      */
     public void setFanSpeed(int wantedFanSpeed) {
 
@@ -374,6 +389,8 @@ public class MainActivity extends AppCompatActivity {
      * Set method for field2
      *
      * @param field2 a string for the read temperature
+     * @author Frederik Lundsbjerg, s205472
+     * @author Thomas Hohnen, s195455
      */
     public void setField2(String field2) {
         this.field2 = field2;
@@ -383,6 +400,8 @@ public class MainActivity extends AppCompatActivity {
      * Get method for field2
      *
      * @return returns a string for the read temperature
+     * @author Frederik Lundsbjerg, s205472
+     * @author Thomas Hohnen, s195455
      */
     public String getField2() {
         return field2;
@@ -393,6 +412,7 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param field2 is the read temp in double type formatted as a string
      * @return return current temp as a rounded integer
+     * @author Frederik Lundsbjerg, s205472
      */
     public int field2Convert(String field2) {
         //string to double
@@ -409,6 +429,7 @@ public class MainActivity extends AppCompatActivity {
      * set method for field3
      *
      * @param field3 field3 as a string which is the fan speed
+     * @author Frederik Lundsbjerg, s205472
      */
     public void setField3(String field3) {
         this.field3 = field3;
@@ -418,6 +439,7 @@ public class MainActivity extends AppCompatActivity {
      * get method for field3
      *
      * @return field3 as a string which is the fan speed
+     * @author Frederik Lundsbjerg, s205472
      */
     public String getField3() {
         return field3;

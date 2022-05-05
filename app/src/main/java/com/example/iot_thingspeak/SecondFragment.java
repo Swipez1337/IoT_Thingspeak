@@ -61,8 +61,8 @@ public class SecondFragment extends Fragment {
 
     /**
      * Method to switch the locale (language) based on the current locale. Currently supports en (english) and da (danish).
-     * <p>
      * Slight inspiration: https://stackoverflow.com/questions/41098448/change-language-on-buttonclick-in-an-android-app
+     * @author Frederik Lundsbjerg, s205472
      */
     public void languageSwitch() {
         //Locale currentLocale = getResources().getConfiguration().locale; //format like en_US / da_DK
